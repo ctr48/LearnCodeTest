@@ -59,7 +59,7 @@
                                 <button id="logoutBtn" class="btn btn-light">Logout</button>
                             </div>
                             <a href="#auth-section" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Get Started</a>
-                            <a href="" class="btn btn-light py-md-3 px-md-5 animated slideInRight">Learn More</a>
+                            <a href="course.html" class="btn btn-light py-md-3 px-md-5 animated slideInRight">Start Course</a>
                         </div>
                     </div>
                 </div>
@@ -80,6 +80,10 @@
                     <div class="mb-3">
                         <input type="password" class="form-control" id="loginPassword" placeholder="Enter your password" required>
                     </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="showLoginPassword">
+                        <label class="form-check-label" for="showLoginPassword">Show password</label>
+                    </div>
                     <div id="loginError" class="alert alert-danger d-none" role="alert"></div>
                     <button type="submit" class="btn btn-primary w-100">
                         <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
@@ -98,6 +102,13 @@
                     </div>
                     <div class="mb-3">
                         <input type="password" class="form-control" id="signupPassword" placeholder="Enter your password" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="password" class="form-control" id="signupConfirmPassword" placeholder="Confirm your password" required>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="showSignupPassword">
+                        <label class="form-check-label" for="showSignupPassword">Show password</label>
                     </div>
                     <div id="signupError" class="alert alert-danger d-none" role="alert"></div>
                     <button type="submit" class="btn btn-primary w-100">

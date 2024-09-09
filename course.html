@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COBOL Code Editor and Compiler</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <style>
+    #nextButton, #showExpectedOutputButton, #markAsCorrectButton, #prevButton {
+      margin-bottom: 20px;
+      margin-right: 10px;
+    }
+    .hidden {
+      display: none;
+    }
+    .correct {
+      color: green;
+    }
+    .incorrect {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h2>Question Bank</h2>
+  <button id="prevButton" onclick="prevChallenge()">&lt;</button>
+  <button id="nextButton" onclick="nextChallenge()">&gt;</button>
+  <div id="challengeText"></div>
+  <button id="showExpectedOutputButton" onclick="showExpectedOutput()">Show Expected Output</button>
+  <button id="markAsCorrectButton" onclick="markAsCorrect()">Mark as Correct</button>
+  <div id="expectedOutput" class="hidden"></div>
+  <div data-pym-src="https://www.jdoodle.com/embed/v1/86d1c02375800a77"></div>
+  <script src="https://www.jdoodle.com/assets/jdoodle-pym.min.js" type="text/javascript"> </script>
+  <div id="outputResult"></div>
+  <div id="answerResult"></div>
+ 
+  <script>
+    const challengeTextElement = document.getElementById('challengeText');
+    const runButtonElement = document.getElementById('runButton');
+    const checkAnswerButtonElement = document.getElementById('checkAnswerButton');
+    const outputResultElement = document.getElementById('outputResult');
+    const answerResultElement = document.getElementById('answerResult');
+    const nextButtonElement = document.getElementById('nextButton');
+    const prevButtonElement = document.getElementById('prevButton');
+    const showExpectedOutputButtonElement = document.getElementById('showExpectedOutputButton');
+    const markAsCorrectButtonElement = document.getElementById('markAsCorrectButton');
+    const expectedOutputElement = document.getElementById('expectedOutput');
+
+    // Load challenges
+    const challenges = [
+      {
+        text: 'Write a COBOL program that prints "Hello, World!" to the console.',
+        expectedOutput: 'Hello, World!',
+        isCorrect: false
+      },
+      {
+        text: 'Write a COBOL program that accepts two numbers, adds them, and prints the result. Use the numbers 10 and 20.',
+        expectedOutput: 'The sum of 10 and 20 is 30.',
+        isCorrect: false
+      },
+      {
+        text: 'Write a COBOL program that accepts a users name and prints a greeting in the format: "Hello, [Name]!".',
+        expectedOutput: 'Hello, John!',
+        isCorrect: false
+      },
+      {
+        text: 'Write a COBOL program that checks if a number is greater than 10. If it is, print "Greater than 10", otherwise print "10 or less". Use the number 15.',
+        expectedOutput: 'Greater than 10',
+        isCorrect: false
+      },
+      {
+        text: 'Write a COBOL program that accepts two numbers and prints whether the first is greater, equal to, or less than the second. Use 7 and 9 as input.',
+        expectedOutput: '7 is less than 9.',
+        isCorrect: false
+      },
+      {
+        text: 'Write a COBOL program that loops through the numbers 1 to 5 and prints each number.',
+        expectedOutput: '1\n2\n3\n4\n5',
+        isCorrect: false
+      },
+      {
+        text: 'Write a COBOL program that multiplies two numbers, 6 and 7, and prints the result.',
+        expectedOutput: 'The result of 6 times 7 is 42.',
+        isCorrect: false
+      },
+      {
+        text: 'Write a COBOL program that calculates the factorial of 5 and prints the result.',
+        expectedOutput: 'The factorial of 5 is 120.',
+        isCorrect: false
+      },
+      {
+        text: 'Write a COBOL program that reads a number and prints "Even" if the number is even and "Odd" if the number is odd. Use the number 4.',
+        expectedOutput: 'Even',
+        isCorrect: false
+      },
+      {
+        text: 'Write a COBOL program that accepts three numbers and prints the largest among them. Use 5, 12, and 8 as input.',
+        expectedOutput: 'The largest number is 12.',
+        isCorrect: false
+      }
+    ];
+
+    let currentChallengeIndex = 0;
+
+    function getCurrentChallenge() {
+      return challenges[currentChallengeIndex];
+    }
+
+    function displayChallenge() {
+      const challenge = getCurrentChallenge();
+      challengeTextElement.textContent = challenge.text;
+      updateChallengeTextColor(challenge);
+      expectedOutputElement.textContent = '';
+      expectedOutputElement.classList.add('hidden');
+    }
+
+    function nextChallenge() {
+      currentChallengeIndex++;
+
+      if (currentChallengeIndex < challenges.length) {
+        displayChallenge();
+        outputResultElement.textContent = "";
+        answerResultElement.textContent = "";
+        prevButtonElement.disabled = false;
+      } else {
+        nextButtonElement.disabled = true;
+      }
+    }
+
+    function prevChallenge() {
+      currentChallengeIndex--;
+
+      if (currentChallengeIndex >= 0) {
+        displayChallenge();
+        outputResultElement.textContent = "";
+        answerResultElement.textContent = "";
+        nextButtonElement.disabled = false;
+      } else {
+        currentChallengeIndex = 0;
+        prevButtonElement.disabled = true;
+      }
+    }
+
+    function showExpectedOutput() {
+      const challenge = getCurrentChallenge();
+      expectedOutputElement.textContent = 'Expected Output: ' + challenge.expectedOutput;
+      expectedOutputElement.classList.remove('hidden');
+    }
+
+    function markAsCorrect() {
+      const currentChallenge = getCurrentChallenge();
+      currentChallenge.isCorrect = !currentChallenge.isCorrect;
+      updateChallengeTextColor(currentChallenge);
+    }
+
+    function updateChallengeTextColor(challenge) {
+      challengeTextElement.classList.remove('correct', 'incorrect');
+      if (challenge.isCorrect) {
+        challengeTextElement.classList.add('correct');
+      } else {
+        challengeTextElement.classList.add('incorrect');
+      }
+    }
+
+    window.addEventListener('message', function(e) {
+      if (e.data && e.data.type === 'result') {
+        const output = e.data.output;
+        outputResultElement.textContent = "Output: " + output;
+      }
+    }, false);
+
+    displayChallenge();
+    prevButtonElement.disabled = true; // Disable prev button for the first challenge
+  </script>
+</body>
+</html>

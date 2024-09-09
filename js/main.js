@@ -104,6 +104,13 @@
         const name = $('#signupName').val();
         const email = $('#signupEmail').val();
         const password = $('#signupPassword').val();
+        const confirmPassword = $('#signupConfirmPassword').val();
+
+        if (password !== confirmPassword) {
+            displayError('signupError', "Passwords do not match. Please try again.");
+            toggleLoading($(this), false);
+            return;
+        }
 
         auth.createUserWithEmailAndPassword(email, password)
             .then((userCredential) => {
@@ -194,5 +201,29 @@
             showAuthForms();
         }
     });
+
+    // Toggle password visibility
+    $('#showLoginPassword').change(function() {
+        const passwordField = $('#loginPassword');
+        const passwordFieldType = passwordField.attr('type');
+        if (passwordFieldType === 'password') {
+            passwordField.attr('type', 'text');
+        } else {
+            passwordField.attr('type', 'password');
+        }
+    });
+
+    $('#showSignupPassword').change(function() {
+        const passwordField = $('#signupPassword');
+        const confirmPasswordField = $('#signupConfirmPassword');
+        const passwordFieldType = passwordField.attr('type');
+        if (passwordFieldType === 'password') {
+            passwordField.attr('type', 'text');
+            confirmPasswordField.attr('type', 'text');
+        } else {
+            passwordField.attr('type', 'password');
+            confirmPasswordField.attr('type', 'password');
+        }
+    });  
 
 })(jQuery);
