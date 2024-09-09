@@ -46,9 +46,32 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
+    // Helper function to show/hide loading spinner
+    function toggleLoading(form, show) {
+        const button = form.find('button[type="submit"]');
+        const spinner = button.find('.spinner-border');
+        if (show) {
+            button.prop('disabled', true);
+            spinner.removeClass('d-none');
+        } else {
+            button.prop('disabled', false);
+            spinner.addClass('d-none');
+        }
+    }
+
+    // Helper function to display error messages
+    function displayError(elementId, message) {
+        const errorElement = $(`#${elementId}`);
+        errorElement.text(message).removeClass('d-none');
+        setTimeout(() => {
+            errorElement.addClass('d-none');
+        }, 5000);
+    }
+
     // Login form submission
     $('#loginForm').submit(function(e) {
         e.preventDefault();
+        toggleLoading($(this), true);
         const email = $('#loginEmail').val();
         const password = $('#loginPassword').val();
 
@@ -61,13 +84,23 @@
             })
             .catch((error) => {
                 console.error("Login error:", error.message);
-                alert("Login failed: " + error.message);
+                let errorMessage = "Login failed. Please check your email and password and try again.";
+                if (error.code === 'auth/user-not-found') {
+                    errorMessage = "No account found with this email. Please sign up if you don't have an account.";
+                } else if (error.code === 'auth/wrong-password') {
+                    errorMessage = "Incorrect password. Please try again.";
+                }
+                displayError('loginError', errorMessage);
+            })
+            .finally(() => {
+                toggleLoading($(this), false);
             });
     });
 
     // Signup form submission
     $('#signupForm').submit(function(e) {
         e.preventDefault();
+        toggleLoading($(this), true);
         const name = $('#signupName').val();
         const email = $('#signupEmail').val();
         const password = $('#signupPassword').val();
@@ -81,7 +114,18 @@
             })
             .catch((error) => {
                 console.error("Signup error:", error.message);
-                alert("Signup failed: " + error.message);
+                let errorMessage = "Signup failed. Please try again.";
+                if (error.code === 'auth/email-already-in-use') {
+                    errorMessage = "An account with this email already exists. Please log in or use a different email.";
+                } else if (error.code === 'auth/weak-password') {
+                    errorMessage = "Password is too weak. Please use a stronger password.";
+                } else if (error.message.includes("CONFIGURATION_NOT_FOUND")) {
+                    errorMessage = "We're experiencing technical difficulties. Please try again later or contact support.";
+                }
+                displayError('signupError', errorMessage);
+            })
+            .finally(() => {
+                toggleLoading($(this), false);
             });
     });
 
@@ -126,6 +170,7 @@
             })
             .catch((error) => {
                 console.error("Error creating new user:", error);
+                displayError('signupError', "Failed to create user profile. Please try again.");
             });
     }
 

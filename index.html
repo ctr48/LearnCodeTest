@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>eLEARNING - eLearning HTML Template</title>
+    <title>LearnCOBOL - Online COBOL Learning Platform</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -29,24 +29,8 @@
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
 
-    <style>
-        #auth-section .row {
-            display: flex;
-            justify-content: space-between;
-        }
-        #auth-section .col-lg-5 {
-            width: 45%;
-        }
-        @media (max-width: 991px) {
-            #auth-section .row {
-                flex-direction: column;
-            }
-            #auth-section .col-lg-5 {
-                width: 100%;
-                margin-bottom: 2rem;
-            }
-        }
-    </style>
+    <!-- Auth Stylesheet -->
+    <link href="css/auth.css" rel="stylesheet">
 </head>
 
 <body>
@@ -67,15 +51,15 @@
                     <div class="row justify-content-start">
                         <div class="col-sm-10 col-lg-8">
                             <h5 class="text-primary text-uppercase mb-3 animated slideInDown">Niche Coding Courses</h5>
-                            <h1 class="display-3 text-white animated slideInDown">Learn Cobol Online</h1>
-                            <p class="fs-5 text-white mb-4 pb-2"></p>
+                            <h1 class="display-3 text-white animated slideInDown">Learn COBOL Online</h1>
+                            <p class="fs-5 text-white mb-4 pb-2">Master the language that powers critical systems worldwide</p>
                             <div id="userInfo" style="display: none;">
                                 <h3 class="text-white">Welcome, <span id="userName"></span>!</h3>
-                                <p class="text-white">Your Cobol Course Progress: <span id="userProgress"></span>%</p>
+                                <p class="text-white">Your COBOL Course Progress: <span id="userProgress"></span>%</p>
                                 <button id="logoutBtn" class="btn btn-light">Logout</button>
                             </div>
-                            <a href="" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Read More</a>
-                            <a href="#auth-section" class="btn btn-light py-md-3 px-md-5 animated slideInRight">Join Now</a>
+                            <a href="#auth-section" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Get Started</a>
+                            <a href="" class="btn btn-light py-md-3 px-md-5 animated slideInRight">Learn More</a>
                         </div>
                     </div>
                 </div>
@@ -96,7 +80,11 @@
                     <div class="mb-3">
                         <input type="password" class="form-control" id="loginPassword" placeholder="Enter your password" required>
                     </div>
-                    <button type="submit" class="btn btn-primary w-100">Login</button>
+                    <div id="loginError" class="alert alert-danger d-none" role="alert"></div>
+                    <button type="submit" class="btn btn-primary w-100">
+                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                        Login
+                    </button>
                 </form>
             </div>
             <div class="col-lg-5">
@@ -111,7 +99,11 @@
                     <div class="mb-3">
                         <input type="password" class="form-control" id="signupPassword" placeholder="Enter your password" required>
                     </div>
-                    <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+                    <div id="signupError" class="alert alert-danger d-none" role="alert"></div>
+                    <button type="submit" class="btn btn-primary w-100">
+                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                        Sign Up
+                    </button>
                 </form>
             </div>
         </div>
