@@ -30,6 +30,11 @@ document.addEventListener('DOMContentLoaded', function() {
           console.error('Error signing out:', error);
         });
       });
+      
+      // Add click event handler for Manage Account button
+      document.getElementById('manageAccountBtn').addEventListener('click', function() {
+        alert('Please check your email for account information.');
+      });
     } else {
       // User is not signed in, redirect to login page
       window.location.href = 'index.html';

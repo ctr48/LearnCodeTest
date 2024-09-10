@@ -11,7 +11,7 @@
 
   <style>
     #nextButton, #showExpectedOutputButton, #markAsCorrectButton, #prevButton {
-      margin-bottom: 20px;
+      margin-bottom: 40px;
       margin-right: 10px;
     }
     .hidden {
@@ -38,6 +38,13 @@
       background-color: #f8d7da;
       color: #721c24;
     }
+    .difficulty {
+      font-weight: bold;
+      margin-left: 10px;
+    }
+    .easy { color: green; }
+    .medium { color: orange; }
+    .hard { color: red; }
   </style>
 </head>
 <body>
@@ -50,10 +57,13 @@
     </ul>
   </nav>
 
-  <h2>Question Bank</h2>
+
+  
+  <h1> 100 Challenges </h1>
   <button id="prevButton" onclick="prevChallenge()">&lt;</button>
   <button id="nextButton" onclick="nextChallenge()">&gt;</button>
   <div id="challengeText"></div>
+  <div id="challengeDifficulty"></div>
   <button id="showExpectedOutputButton" onclick="showExpectedOutput()">Show Expected Output</button>
   <button id="markAsCorrectButton" onclick="markAsCorrect()">Mark as Correct</button>
   <div id="expectedOutput" class="hidden"></div>
@@ -62,11 +72,24 @@
   <div id="outputResult"></div>
   <div id="answerResult"></div>
 
+  <h1>Challenge Statistics</h1>
+
+  <div class="stats">
+    <p id="total-correct"></p>
+    <p id="percentage-correct"></p>
+    <p id="total-easy"></p>
+    <p id="total-medium"></p>
+    <p id="total-hard"></p>
+  </div>
+
+
+
   <h3>All Challenges</h3>
   <ul id="challengeList"></ul>
  
   <script>
     const challengeTextElement = document.getElementById('challengeText');
+    const challengeDifficultyElement = document.getElementById('challengeDifficulty');
     const runButtonElement = document.getElementById('runButton');
     const checkAnswerButtonElement = document.getElementById('checkAnswerButton');
     const outputResultElement = document.getElementById('outputResult');
@@ -78,497 +101,19 @@
     const expectedOutputElement = document.getElementById('expectedOutput');
     const challengeListElement = document.getElementById('challengeList');
 
+   
+   
+   
+   
     // Load challenges
     const challenges = [
       {
         text: 'Write a COBOL program that prints "Hello, World!" to the console.',
         expectedOutput: 'Hello, World!',
-        isCorrect: false
+        isCorrect: false,
+        difficulty: 'easy'
       },
-      {
-        text: 'Write a COBOL program that accepts two numbers, adds them, and prints the result. Use the numbers 10 and 20.',
-        expectedOutput: 'The sum of 10 and 20 is 30.',
-        isCorrect: false
-      },
-      {
-        text: 'Write a COBOL program that accepts a users name and prints a greeting in the format: "Hello, [Name]!".',
-        expectedOutput: 'Hello, John!',
-        isCorrect: false
-      },
-      {
-        text: 'Write a COBOL program that checks if a number is greater than 10. If it is, print "Greater than 10", otherwise print "10 or less". Use the number 15.',
-        expectedOutput: 'Greater than 10',
-        isCorrect: false
-      },
-      {
-        text: 'Write a COBOL program that accepts two numbers and prints whether the first is greater, equal to, or less than the second. Use 7 and 9 as input.',
-        expectedOutput: '7 is less than 9.',
-        isCorrect: false
-      },
-      {
-        text: 'Write a COBOL program that loops through the numbers 1 to 5 and prints each number.',
-        expectedOutput: '1\n2\n3\n4\n5',
-        isCorrect: false
-      },
-      {
-        text: 'Write a COBOL program that multiplies two numbers, 6 and 7, and prints the result.',
-        expectedOutput: 'The result of 6 times 7 is 42.',
-        isCorrect: false
-      },
-      {
-        text: 'Write a COBOL program that calculates the factorial of 5 and prints the result.',
-        expectedOutput: 'The factorial of 5 is 120.',
-        isCorrect: false
-      },
-      {
-        text: 'Write a COBOL program that reads a number and prints "Even" if the number is even and "Odd" if the number is odd. Use the number 4.',
-        expectedOutput: 'Even',
-        isCorrect: false
-      },
-      {
-        text: 'Write a COBOL program that accepts three numbers and prints the largest among them. Use 5, 12, and 8 as input.',
-        expectedOutput: 'The largest number is 12.',
-        isCorrect: false
-      },
-      {text: 'Write a COBOL program that accepts a name and age, and then prints "Hello, [Name], you are [Age] years old.".',
-    expectedOutput: 'Hello, John, you are 30 years old.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that calculates the square of a number entered by the user and prints the result.',
-    expectedOutput: 'The square of 4 is 16.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that accepts a number and prints whether it is positive, negative, or zero.',
-    expectedOutput: 'The number is positive.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that reads the first 10 even numbers and prints them in reverse order.',
-    expectedOutput: '20\n18\n16\n14\n12\n10\n8\n6\n4\n2',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that calculates the sum of all numbers from 1 to 100.',
-    expectedOutput: 'The sum of numbers from 1 to 100 is 5050.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that accepts a year from the user and checks if it is a leap year.',
-    expectedOutput: '2024 is a leap year.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that accepts a string and prints it in reverse order.',
-    expectedOutput: 'Input: COBOL, Output: LOBOC',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that calculates the average of five numbers entered by the user.',
-    expectedOutput: 'The average of the numbers is 20.',
-    isCorrect: false},
-    {text: 'Write a COBOL program that retrieves the current system date, converts it to an integer for date calculations, and then converts it back to a date. Display the current date, the integer representation, and the converted date.',
-    expectedOutput: 'Today\'s Date: 20230901\nDays since 1/1/1601: [DateIntValue]\nConverted Date: 20230901',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that accepts an alphanumeric string containing numeric characters, converts it into a numeric value using the NUMVAL function, and displays the result.',
-    expectedOutput: 'Numeric Value: 123',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that uses the MAX intrinsic function to calculate and display the maximum value from a list of numbers (e.g., 5, 10, 15).',
-    expectedOutput: 'Maximum Value: 15',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that accepts a string and prints the reverse of the string using the REVERSE function.',
-    expectedOutput: 'Reversed String: LOBOC',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that calls a subprogram using the CALL statement. Pass two values from the main program to the subprogram, one by reference and one by content. The subprogram should display the values and return control to the main program.',
-    expectedOutput: 'Subprogram called with values: [DataItem1], [DataItem2]\nReturned from SubProgram.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that initializes a graphical user interface (GUI) using the sp2 library. Create a panel with a simple message displayed on the GUI.',
-    expectedOutput: 'GUI Initialized',
-    isCorrect: false
-  },
-  {text: 'Write a COBOL program that accepts two numbers, adds them together, and displays the result.',
-    expectedOutput: 'The sum of 10 and 20 is 30.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that accepts a name and age, and displays the message: "Hello [Name], you are [Age] years old.".',
-    expectedOutput: 'Hello John, you are 25 years old.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that accepts two numbers and displays which one is greater.',
-    expectedOutput: '20 is greater than 10.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that calculates the product of two numbers entered by the user and prints the result.',
-    expectedOutput: 'The product of 6 and 7 is 42.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that checks if a number entered by the user is even or odd.',
-    expectedOutput: '4 is even.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that calculates the factorial of a number entered by the user.',
-    expectedOutput: 'The factorial of 5 is 120.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that accepts a string from the user and displays it in uppercase.',
-    expectedOutput: 'Input: cobol, Output: COBOL',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that accepts 3 numbers and prints the smallest number.',
-    expectedOutput: 'The smallest number is 5.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that reads a list of 10 numbers and prints them in reverse order.',
-    expectedOutput: '10\n9\n8\n7\n6\n5\n4\n3\n2\n1',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that accepts two dates and calculates the number of days between them.',
-    expectedOutput: 'The number of days between 20230901 and 20230910 is 9 days.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that reads and writes customer records from a sequential file. Display each customer\'s name.',
-    expectedOutput: 'Customer: John Doe\nCustomer: Jane Smith',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that searches an indexed file for a specific CustomerID and prints the associated customer name.',
-    expectedOutput: 'Customer: John Doe',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that accepts 5 numbers, calculates their average, and displays the result.',
-    expectedOutput: 'The average of the numbers is 15.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that accepts a string and prints the length of the string.',
-    expectedOutput: 'The length of the string is 5.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that accepts 3 numbers and prints whether they are in ascending order.',
-    expectedOutput: 'The numbers are in ascending order.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that reads a file and prints the total number of records in the file.',
-    expectedOutput: 'The file contains 50 records.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that accepts two numbers, divides the first by the second, and prints the result.',
-    expectedOutput: 'The result of 10 divided by 2 is 5.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that reads numbers from a file and prints the largest number.',
-    expectedOutput: 'The largest number is 100.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that accepts a year and checks if it is a leap year.',
-    expectedOutput: '2024 is a leap year.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that accepts a temperature in Celsius and converts it to Fahrenheit.',
-    expectedOutput: 'The temperature in Fahrenheit is 98.6.',
-    isCorrect: false},
-    { text: 'Write a COBOL program that reads a file of customer records, sorts the records by customer name, and writes the sorted data to a new file.',
-    expectedOutput: 'Customer records sorted and written to sorted_customer.dat.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that uses a PERFORM loop to calculate the sum of the first 100 prime numbers.',
-    expectedOutput: 'The sum of the first 100 prime numbers is [sum].',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that calculates the compound interest for a principal amount, rate, and time entered by the user.',
-    expectedOutput: 'The compound interest for a principal of 1000, rate of 5%, and time of 2 years is 102.50.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that uses a binary search algorithm to search for a number in a sorted list of 100 numbers.',
-    expectedOutput: 'Number found at position 45.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that simulates a banking system where users can deposit, withdraw, and check their balance. Ensure that withdrawals do not exceed the balance.',
-    expectedOutput: 'Transaction successful. Your new balance is $950.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that reads employee records from an indexed file and updates their salaries by 10% for employees earning below $50,000. Write the updated records back to the file.',
-    expectedOutput: 'Salaries updated for all employees earning below $50,000.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that calculates the greatest common divisor (GCD) of two numbers using the Euclidean algorithm.',
-    expectedOutput: 'The GCD of 56 and 98 is 14.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that uses a nested PERFORM loop to generate the first 10 rows of Pascal\'s triangle.',
-    expectedOutput: 'Pascal\'s Triangle:\n1\n1 1\n1 2 1\n1 3 3 1\n...',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that reads a file containing student grades, calculates the average grade, and assigns a letter grade based on the average.',
-    expectedOutput: 'Average grade: 85\nLetter grade: B',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that accepts two dates and calculates the number of years, months, and days between them.',
-    expectedOutput: 'The difference is 2 years, 3 months, and 15 days.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that calculates the Fibonacci sequence up to the 50th number and prints the result.',
-    expectedOutput: 'Fibonacci sequence:\n0\n1\n1\n2\n3\n5\n8\n...',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that reads a file of sales data, groups the data by region, and prints the total sales for each region.',
-    expectedOutput: 'Total sales for Region A: $10,000\nTotal sales for Region B: $15,000',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that implements a simple encryption algorithm where each letter in a string is shifted by 3 positions in the alphabet (Caesar cipher).',
-    expectedOutput: 'Encrypted text: "Khoor Zruog!" for input "Hello World!"',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that uses an indexed file to store inventory data. Implement a function to search for a product by ID and update the quantity in stock.',
-    expectedOutput: 'Product ID 123 found. Quantity updated to 50.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that performs matrix multiplication for two 3x3 matrices.',
-    expectedOutput: 'Matrix multiplication result:\n[Matrix Result]',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that reads a large text file and counts the occurrence of each word, ignoring case sensitivity. Display the top 10 most frequent words.',
-    expectedOutput: 'Most frequent words:\n1. "the" - 500 occurrences\n2. "and" - 450 occurrences\n...',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that calculates the number of leap years between two given years.',
-    expectedOutput: 'There are 52 leap years between 1900 and 2024.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that simulates a basic inventory system, where users can add, remove, and check the availability of products. Ensure that inventory levels are updated correctly.',
-    expectedOutput: 'Product "Laptop" added. Current stock: 20.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that reads employee details from a file and generates a payroll report, calculating taxes and net pay based on a progressive tax rate.',
-    expectedOutput: 'Payroll Report:\nEmployee: John Doe\nGross Pay: $5000\nTaxes: $750\nNet Pay: $4250',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that uses recursion to calculate the power of a number (e.g., x^y).',
-    expectedOutput: 'The result of 2^5 is 32.',
-    isCorrect: false},
-    {text: 'Write a COBOL program that implements a multi-threaded system for processing large amounts of data in parallel, where each thread reads a portion of the data from an indexed file, processes it, and writes the result to a different file.',
-    expectedOutput: 'Data processed in parallel and written to output files.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that implements a custom memory management system, allowing dynamic memory allocation for arrays and tables. Implement garbage collection to clean up unused memory.',
-    expectedOutput: 'Memory dynamically allocated and cleaned up after use.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that implements a distributed database system across multiple machines. Use COBOL to connect to remote databases, synchronize data, and ensure data consistency across the network.',
-    expectedOutput: 'Distributed database synchronized across machines.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that simulates a real-time stock trading system. The program should process live market data, place buy and sell orders based on predefined strategies, and update the portfolio in real time.',
-    expectedOutput: 'Trades executed and portfolio updated in real-time.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that implements a neural network from scratch. The program should handle forward propagation, backpropagation, and gradient descent for training a network on a given dataset.',
-    expectedOutput: 'Neural network trained on the dataset.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that performs high-precision arithmetic operations with 1000-digit numbers. Implement functions for addition, subtraction, multiplication, and division of very large numbers.',
-    expectedOutput: 'Operations performed on large numbers with 1000 digits.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that implements an interpreter for a simple programming language. The interpreter should be able to parse and execute basic arithmetic, loops, and conditionals.',
-    expectedOutput: 'Program interpreted and executed successfully.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that implements a blockchain ledger. Each block should store transaction data, a hash of the previous block, and a cryptographic proof-of-work.',
-    expectedOutput: 'Blockchain ledger created with transactions and proof-of-work.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that implements a custom file compression algorithm (similar to ZIP). The program should compress a file and then be able to decompress it back to its original state.',
-    expectedOutput: 'File compressed and decompressed successfully.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that uses machine learning to analyze financial data and predict stock prices based on historical trends. The program should be able to train on a dataset and output future price predictions.',
-    expectedOutput: 'Stock price predictions based on historical data.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that simulates an entire banking system with multiple branches, handling millions of transactions. Implement inter-branch transfers, transaction logging, and fraud detection algorithms.',
-    expectedOutput: 'Banking system with inter-branch transfers and fraud detection implemented.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that integrates with modern APIs (e.g., RESTful APIs) to pull real-time data from a remote service, process the data, and store it in a local indexed file. Implement error handling for failed API calls.',
-    expectedOutput: 'Data retrieved from API and stored in the file system.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that simulates a real-time air traffic control system. It should handle hundreds of planes, track their coordinates, manage flight paths, and ensure that no two planes collide.',
-    expectedOutput: 'Air traffic controlled and flights managed in real-time.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that processes and queries massive datasets (terabytes of data) using MapReduce. The program should be able to perform distributed data processing efficiently across multiple machines.',
-    expectedOutput: 'MapReduce job completed, and data queried successfully.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that implements a genetic algorithm to optimize the parameters of a complex system. The program should simulate evolution, crossover, mutation, and selection to find the best solution.',
-    expectedOutput: 'Best solution found using genetic algorithms.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that models a complete airline reservation system, including booking, seat selection, ticketing, and pricing algorithms. Handle cancellations, rescheduling, and overbooking scenarios.',
-    expectedOutput: 'Airline reservation system operational with all features.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that uses natural language processing (NLP) techniques to analyze and summarize large text documents. The program should be able to identify key topics and generate a concise summary.',
-    expectedOutput: 'Document summarized with key topics extracted.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that performs real-time facial recognition using image processing libraries. Implement the ability to match faces from a live video stream against a database of stored images.',
-    expectedOutput: 'Faces matched in real-time from the video stream.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that implements a distributed version control system similar to Git. Handle branching, merging, and conflict resolution between multiple contributors working on the same project.',
-    expectedOutput: 'Version control system operational with branches and merges.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a COBOL program that integrates with Internet of Things (IoT) devices. The program should read sensor data from multiple IoT devices, process the data, and trigger actions based on predefined thresholds.',
-    expectedOutput: 'Sensor data processed, and actions triggered.',
-    isCorrect: false},
-    { text: 'Update your resume to include your experience with COBOL. Make sure to highlight any projects, challenges, or tasks you have completed, and describe how these skills are applicable to enterprise systems.',
-    expectedOutput: 'Resume updated with COBOL skills and relevant projects.',
-    isCorrect: false
-  },
-  {
-    text: 'Create a LinkedIn profile or update your existing one with your new COBOL skills. Join COBOL-related professional groups and engage with others in the community.',
-    expectedOutput: 'LinkedIn profile updated with COBOL experience and connections made.',
-    isCorrect: false
-  },
-  {
-    text: 'Research and apply for a COBOL certification, such as the Micro Focus COBOL Certification or another industry-recognized credential. Certifications will enhance your resume and showcase your COBOL expertise.',
-    expectedOutput: 'Applied for COBOL certification.',
-    isCorrect: false
-  },
-  {
-    text: 'Build a COBOL project portfolio website. Showcase the projects you’ve worked on during this course, including detailed explanations and code samples. This will help potential employers view your skills in action.',
-    expectedOutput: 'Portfolio website showcasing COBOL projects is live.',
-    isCorrect: false
-  },
-  {
-    text: 'Attend or participate in a COBOL-related online webinar, meetup, or conference. Write a brief summary of the event and what you learned about COBOL trends in the industry.',
-    expectedOutput: 'Attended COBOL event and summarized key insights.',
-    isCorrect: false
-  },
-  {
-    text: 'Research job postings for COBOL developers or engineers. Note the key skills required, and tailor your resume to align with these requirements.',
-    expectedOutput: 'Key COBOL job skills identified and resume updated accordingly.',
-    isCorrect: false
-  },
-  {
-    text: 'Create a GitHub repository and upload some of your COBOL code and projects. Write clear README files and documentation so that others can understand your work.',
-    expectedOutput: 'COBOL projects uploaded to GitHub with proper documentation.',
-    isCorrect: false
-  },
-  {
-    text: 'Apply for an entry-level position as a COBOL developer or COBOL support engineer. Focus on roles that offer mentorship and the opportunity to work on legacy systems in industries like finance or government.',
-    expectedOutput: 'Applied for entry-level COBOL positions.',
-    isCorrect: false
-  },
-  {
-    text: 'Reach out to a professional COBOL developer or engineer on LinkedIn or via email. Ask them for advice on getting into the industry, current trends, and tips for success.',
-    expectedOutput: 'Contacted a COBOL professional and gained insights on the field.',
-    isCorrect: false
-  },
-  {
-    text: 'Prepare for a technical interview as a COBOL developer. Research common COBOL interview questions and practice coding challenges that align with real-world business problems.',
-    expectedOutput: 'Prepared for a COBOL technical interview by practicing questions and challenges.',
-    isCorrect: false
-  },
-  {
-    text: 'Research COBOL-related licenses and industry affiliations (e.g., ISO certifications for COBOL-related technologies). Consider applying for memberships or licenses that will advance your career.',
-    expectedOutput: 'Researched COBOL licenses and industry affiliations.',
-    isCorrect: false
-  },
-  {
-    text: 'Write a blog post or LinkedIn article on how COBOL is still relevant in modern industries, especially in banking, insurance, and government sectors. Share how you’ve learned COBOL and the value it brings.',
-    expectedOutput: 'Blog post or LinkedIn article written and shared.',
-    isCorrect: false
-  },
-  {
-    text: 'Connect with COBOL professionals or industry groups on LinkedIn. Build a network that includes hiring managers, developers, and others in the COBOL space.',
-    expectedOutput: 'Connections with COBOL professionals made on LinkedIn.',
-    isCorrect: false
-  },
-  {
-    text: 'Apply for a senior COBOL position or a team lead role after gaining experience. Use your resume, portfolio, and certifications to demonstrate your expertise in COBOL and legacy system modernization.',
-    expectedOutput: 'Applied for senior COBOL positions or team lead roles.',
-    isCorrect: false
-  },
-  {
-    text: 'Review job boards for COBOL contract opportunities. Many organizations need short-term COBOL consultants to update or migrate legacy systems. Apply for these positions.',
-    expectedOutput: 'Reviewed and applied for COBOL contract opportunities.',
-    isCorrect: false
-  },
-  {
-    text: 'Congratulations! You are now ready to be hired as a COBOL engineer. Review your resume, portfolio, and connections. Apply for multiple COBOL engineering positions in industries like finance, insurance, and government.',
-    expectedOutput: 'Applied for multiple COBOL engineer positions. Ready for hire!',
-    isCorrect: false}
+      // Add more challenges here with their respective difficulties
     ];
 
     let currentChallengeIndex = 0;
@@ -580,6 +125,8 @@
     function displayChallenge() {
       const challenge = getCurrentChallenge();
       challengeTextElement.textContent = challenge.text;
+      challengeDifficultyElement.textContent = `Difficulty: ${challenge.difficulty}`;
+      challengeDifficultyElement.className = `difficulty ${challenge.difficulty}`;
       updateChallengeTextColor(challenge);
       expectedOutputElement.textContent = '';
       expectedOutputElement.classList.add('hidden');
@@ -659,7 +206,7 @@
     // Populate the challenge list
     challenges.forEach((challenge, index) => {
       const listItem = document.createElement('li');
-      listItem.textContent = `${index + 1}. ${challenge.text}`;
+      listItem.innerHTML = `${index + 1}. ${challenge.text} <span class="difficulty ${challenge.difficulty}">(${challenge.difficulty})</span>`;
       listItem.addEventListener('click', () => {
         currentChallengeIndex = index;
         displayChallenge();
@@ -675,6 +222,56 @@
     updateChallengeListColors();
     displayChallenge();
     prevButtonElement.disabled = true; // Disable prev button for the first challenge
+
+
+    function calculateStats(challenges) {
+      const totalChallenges = challenges.length;
+      const correctChallenges = challenges.filter(challenge => challenge.isCorrect).length;
+      const percentageCorrect = ((correctChallenges / totalChallenges) * 100).toFixed(2);
+
+      // Calculate how many challenges of each difficulty level are correct
+      const totalEasy = challenges.filter(challenge => challenge.difficulty === 'easy' && challenge.isCorrect).length;
+      const totalMedium = challenges.filter(challenge => challenge.difficulty === 'medium' && challenge.isCorrect).length;
+      const totalHard = challenges.filter(challenge => challenge.difficulty === 'hard' && challenge.isCorrect).length;
+
+
+      return {
+        total: totalChallenges,
+        correct: correctChallenges,
+        percentage: percentageCorrect,
+        easy: totalEasy,
+        medium: totalMedium,
+        hard: totalHard
+      };
+    }
+
+    // Update stats in the HTML
+    function updateStatsUI() {
+      const stats = calculateStats(challenges);
+      document.getElementById('total-correct').innerText = `Total Correct: ${stats.correct} out of ${stats.total}`;
+      document.getElementById('percentage-correct').innerText = `Percentage Correct: ${stats.percentage}%`;
+      document.getElementById('total-easy').innerText = `Total Easy Challenges: ${stats.easy}`;
+      document.getElementById('total-medium').innerText = `Total Medium Challenges: ${stats.medium}`;
+      document.getElementById('total-hard').innerText = `Total Hard Challenges: ${stats.hard}`;
+    }
+
+    // Initialize the stats on page load
+    updateStatsUI();
   </script>
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+
+
 </body>
 </html>

@@ -3,7 +3,7 @@ nav {
   background-color: #333;
   color: #fff;
   display: flex;
-  justify-content: space-around; 
+  justify-content: space-between; 
   padding: 10px;
   position: fixed;
   top: 0;
@@ -21,6 +21,11 @@ nav ul {
 
 nav ul li {
   margin: 0 20px;
+}
+
+nav ul li:last-child {
+  margin-right: 0;
+  margin-left: auto;
 }
 
 nav ul li a {

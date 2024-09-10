@@ -38,14 +38,14 @@
 
 <body>
     <!-- Navigation Bar -->
-    <nav>
+    <nav id="navigation">
         <ul>
             <li><a href="index.html">Home</a></li>
             <li><a href="course.html">100 Challenges</a></li>
             <li><a href="learn.html">Learn</a></li>
+            <li style="float:right"><button id="manageAccountBtn" class="btn btn-primary">Manage</button></li>
         </ul>
     </nav>
-
 
     <!-- Hero Section Start -->
     <div class="container-fluid p-0 mb-5">
@@ -64,7 +64,7 @@
                                 <button id="logoutBtn" class="btn btn-light">Logout</button>
                             </div>
                             <a href="#auth-section" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Get Started</a>
-                            <a href="course.html" class="btn btn-light py-md-3 px-md-5 animated slideInRight">Start Course</a>
+                            <a href="course.html" class="btn btn-light py-md-3 px-md-5 animated slideInRight">Start Challenges</a>
                         </div>
                     </div>
                 </div>
@@ -75,7 +75,7 @@
 
     <!-- Authentication Section Start -->
     <div id="auth-section" class="container py-5">
-        <div class="row justify-content-between">
+        <div class="row justify-content-center">
             <div class="col-lg-5">
                 <h2 class="text-center mb-4">Login</h2>
                 <form id="loginForm" class="mb-5">
@@ -95,7 +95,18 @@
                         Login
                     </button>
                 </form>
+                <div class="text-center">
+                    <p>Don't have an account?</p>
+                    <button id="showSignUpBtn" class="btn btn-secondary">Sign Up</button>
+                </div>
             </div>
+        </div>
+    </div>
+    <!-- Authentication Section End -->
+
+    <!-- Sign Up Section Start -->
+    <div id="signup-section" class="container py-5" style="display: none;">
+        <div class="row justify-content-center">
             <div class="col-lg-5">
                 <h2 class="text-center mb-4">Sign Up</h2>
                 <form id="signupForm" class="mb-5">
@@ -116,15 +127,16 @@
                         <label class="form-check-label" for="showSignupPassword">Show password</label>
                     </div>
                     <div id="signupError" class="alert alert-danger d-none" role="alert"></div>
-                    <button type="submit" class="btn btn-primary w-100">
-                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                        Sign Up
-                    </button>
+                    <button type="submit" class="btn btn-primary w-100">Sign Up</button>
                 </form>
+                <div class="text-center">
+                    <p>Already have an account?</p>
+                    <button id="showLoginBtn" class="btn btn-secondary">Login</button>
+                </div>
             </div>
         </div>
     </div>
-    <!-- Authentication Section End -->
+    <!-- Sign Up Section End -->
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -141,27 +153,76 @@
     <script>
         // Initialize Firebase
         const firebaseConfig = {
-        apiKey: "AIzaSyCRG4zTvQatqvgz46nTXXao0-qSWr5u3gA",
-        authDomain: "learncobol-452ff.firebaseapp.com",
-        projectId: "learncobol-452ff",
-        storageBucket: "learncobol-452ff.appspot.com",
-        messagingSenderId: "785464884209",
-        appId: "1:785464884209:web:d4ed745c0d8571ac322250",
-        measurementId: "G-7QVF8EY1NT"
-            // Your Firebase configuration goes here
+            apiKey: "AIzaSyCRG4zTvQatqvgz46nTXXao0-qSWr5u3gA",
+            authDomain: "learncobol-452ff.firebaseapp.com",
+            projectId: "learncobol-452ff",
+            storageBucket: "learncobol-452ff.appspot.com",
+            messagingSenderId: "785464884209",
+            appId: "1:785464884209:web:d4ed745c0d8571ac322250",
+            measurementId: "G-7QVF8EY1NT"
         };
 
         firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
 
-        // Get references to the login and signup forms
+        // Get references to the forms and buttons
         const loginForm = document.getElementById('loginForm');
         const signupForm = document.getElementById('signupForm');
+        const showSignUpBtn = document.getElementById('showSignUpBtn');
+        const showLoginBtn = document.getElementById('showLoginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const navigation = document.getElementById('navigation');
 
-        // Add event listeners to the login and signup forms
+        // Get references to password fields and show password checkboxes
+        const loginPassword = document.getElementById('loginPassword');
+        const signupPassword = document.getElementById('signupPassword');
+        const signupConfirmPassword = document.getElementById('signupConfirmPassword');
+        const showLoginPassword = document.getElementById('showLoginPassword');
+        const showSignupPassword = document.getElementById('showSignupPassword');
+
+        // Add event listeners
         loginForm.addEventListener('submit', handleLogin);
         signupForm.addEventListener('submit', handleSignup);
+        showSignUpBtn.addEventListener('click', showSignupSection);
+        showLoginBtn.addEventListener('click', showLoginSection);
+        logoutBtn.addEventListener('click', handleLogout);
+        
+        const manageAccountBtn = document.getElementById('manageAccountBtn');
+        manageAccountBtn.addEventListener('click', handleManageAccount);
 
-        // Define the login and signup event handlers
+        // Add event listeners for show password functionality
+        showLoginPassword.addEventListener('change', () => togglePasswordVisibility(loginPassword, showLoginPassword));
+        showSignupPassword.addEventListener('change', () => {
+            togglePasswordVisibility(signupPassword, showSignupPassword);
+            togglePasswordVisibility(signupConfirmPassword, showSignupPassword);
+        });
+
+        // Function to toggle password visibility
+        function togglePasswordVisibility(passwordField, checkbox) {
+            passwordField.type = checkbox.checked ? 'text' : 'password';
+        }
+
+        // Function to update UI based on authentication state
+        function updateUI(user) {
+            if (user) {
+                document.getElementById('userName').textContent = user.displayName || user.email;
+                document.getElementById('userInfo').style.display = 'block';
+                document.getElementById('auth-section').style.display = 'none';
+                document.getElementById('signup-section').style.display = 'none';
+                navigation.style.display = 'block';
+            } else {
+                document.getElementById('userInfo').style.display = 'none';
+                document.getElementById('auth-section').style.display = 'block';
+                navigation.style.display = 'none';
+            }
+        }
+
+        // Check authentication state on page load
+        firebase.auth().onAuthStateChanged((user) => {
+            updateUI(user);
+        });
+
+        // Define the login event handler
         async function handleLogin(event) {
             event.preventDefault();
 
@@ -172,11 +233,7 @@
             try {
                 // Sign in the user with Firebase Authentication
                 await firebase.auth().signInWithEmailAndPassword(email, password);
-
-                // Display the user's information
-                const user = firebase.auth().currentUser;
-                document.getElementById('userName').textContent = user.displayName;
-                document.getElementById('userInfo').style.display = 'block';
+                updateUI(firebase.auth().currentUser);
             } catch (error) {
                 // Display the error message
                 document.getElementById('loginError').textContent = error.message;
@@ -184,38 +241,88 @@
             }
         }
 
+        // Define the signup event handler
         async function handleSignup(event) {
             event.preventDefault();
 
-            // Get the name, email, and password from the signup form
+            // Get the signup form values
             const name = document.getElementById('signupName').value;
             const email = document.getElementById('signupEmail').value;
             const password = document.getElementById('signupPassword').value;
             const confirmPassword = document.getElementById('signupConfirmPassword').value;
 
-            // Validate the password and confirm password
+            // Check if passwords match
             if (password !== confirmPassword) {
-                document.getElementById('signupError').textContent = 'Passwords do not match.';
+                document.getElementById('signupError').textContent = 'Passwords do not match';
                 document.getElementById('signupError').classList.remove('d-none');
                 return;
             }
 
             try {
-                // Create a new user with Firebase Authentication
+                // Create the user with Firebase Authentication
                 const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
-                const user = userCredential.user;
-
                 // Update the user's display name
-                await user.updateProfile({ displayName: name });
-
-                // Display the user's information
-                document.getElementById('userName').textContent = name;
-                document.getElementById('userInfo').style.display = 'block';
+                await userCredential.user.updateProfile({
+                    displayName: name
+                });
+                // Redirect to Stripe Checkout
+                redirectToStripeCheckout();
             } catch (error) {
                 // Display the error message
                 document.getElementById('signupError').textContent = error.message;
                 document.getElementById('signupError').classList.remove('d-none');
             }
+        }
+
+        async function handleLogout() {
+            try {
+                await firebase.auth().signOut();
+                updateUI(null);
+            } catch (error) {
+                console.error('Error signing out:', error);
+            }
+        }
+
+        // Function to handle Manage Account button click
+        function handleManageAccount() {
+            alert('Please check your initial email for account information.');
+        }
+
+        // Function to show signup section
+        function showSignupSection() {
+            document.getElementById('auth-section').style.display = 'none';
+            document.getElementById('signup-section').style.display = 'block';
+        }
+
+        // Function to show login section
+        function showLoginSection() {
+            document.getElementById('auth-section').style.display = 'block';
+            document.getElementById('signup-section').style.display = 'none';
+        }
+
+        // Prevent navigation away from index.html
+        window.addEventListener('beforeunload', (event) => {
+            if (!firebase.auth().currentUser) {
+                event.preventDefault();
+                event.returnValue = '';
+            }
+        });
+
+        // Disable navigation links when user is not signed in
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', (event) => {
+                if (!firebase.auth().currentUser && !link.getAttribute('href').startsWith('#')) {
+                    event.preventDefault();
+                    alert('Please sign in to access other pages.');
+                }
+            });
+        });
+
+        // Function to redirect to Stripe Checkout
+        function redirectToStripeCheckout() {
+            // Replace this URL with your actual Stripe Checkout link
+            const stripeCheckoutUrl = 'https://buy.stripe.com/fZedRO8I34ImdRm4gg';
+            window.location.href = stripeCheckoutUrl;
         }
     </script>
 </body>

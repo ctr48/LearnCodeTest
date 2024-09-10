@@ -72,6 +72,7 @@
 
   <div id="topic-nav">
     <ul>
+      <li><a href="#part0">Part 0: COBOL Examples</a></li>
       <li><a href="#part1">Part I:COBOL  Basics</a></li>
       <li><a href="#part2">Part II:File Handling</a></li>
       <li><a href="#part3">Part III:Business Processing</a></li>
@@ -79,6 +80,274 @@
       <li><a href="#part5">Part V:Advanced Topics</a></li>
     </ul>
   </div>
+
+  <!-- New Section: Part 0 - Examples -->
+  <div class="part" id="part0">
+    <h1>Part 0—COBOL Examples</h1>
+
+    <div class="section" id="hello-world">
+      <h2>Example 1: Hello World</h2>
+      <p>This is a simple program that displays "Hello, World!" on the screen.</p>
+      <pre><code>IDENTIFICATION DIVISION.
+PROGRAM-ID. HelloWorld.
+
+PROCEDURE DIVISION.
+    DISPLAY 'Hello, World!'.
+    STOP RUN.</code></pre>
+    </div>
+
+    <div class="section" id="user-input">
+      <h2>Example 2: Accepting User Input</h2>
+      <<p>COBOL allows interaction with the user through the <strong>ACCEPT</strong> statement, which captures input from the user at runtime. Data can be accepted from the console or other sources, such as files or system variables. When running COBOL programs in online compilers, user input is often provided via <strong>STDIN</strong> (Standard Input), meaning you can preload inputs instead of typing them interactively.</p>
+  
+  <p>In environments where interactive input isn't supported (like some online COBOL compilers), the input is taken from <strong>STDIN</strong> before running the program. You can provide multiple inputs at once, separated by new lines, simulating what would normally be entered interactively.</p>
+
+  <p>For example, if you want to accept multiple inputs, such as a user's name and age, you can write a program like this:</p>
+  
+  <pre><code>IDENTIFICATION DIVISION.
+    PROGRAM-ID. UserInputProgram.
+    
+    DATA DIVISION.
+    WORKING-STORAGE SECTION.
+    01 CustomerName PIC X(20).
+    01 CustomerAge PIC 9(2).
+    
+    PROCEDURE DIVISION.
+        DISPLAY 'Enter your name: '.
+        ACCEPT CustomerName.
+        
+        DISPLAY 'Enter your age: '.
+        ACCEPT CustomerAge.
+    
+        DISPLAY 'Hello, ' CustomerName ', you are ' CustomerAge ' years old.'.
+    
+        STOP RUN.</code></pre>
+    
+  
+  <p><strong>Using STDIN:</strong> In online COBOL compilers, such as JDoodle, you can enter inputs like this in the "Input" section (STDIN):</p>
+  
+  <pre><code>
+  John Doe
+  30
+  </code></pre>
+
+  <p>The program will then take "John Doe" as the value for <strong>CustomerName</strong> and "30" as the value for <strong>CustomerAge</strong>, and output:</p>
+
+  <pre><code>
+  Enter your name: 
+  Enter your age: 
+  Hello, John Doe, you are 30 years old.
+  </code></pre>
+
+  <p>This method of using STDIN is crucial for compilers that don't support live user interaction.</p>
+</div>
+
+    <div class="section" id="arithmetic">
+      <h2>Example 3: Simple Arithmetic</h2>
+      <p>This program performs a simple addition operation and displays the result.</p>
+      <pre><code>IDENTIFICATION DIVISION.
+PROGRAM-ID. AddNumbers.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 Number1 PIC 9(2).
+01 Number2 PIC 9(2).
+01 Sum PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO Number1.
+    MOVE 20 TO Number2.
+    ADD Number1 TO Number2 GIVING Sum.
+    DISPLAY 'The sum of ' Number1 ' and ' Number2 ' is ' Sum.
+    STOP RUN.</code></pre>
+    </div>
+
+
+  <div class="section" id="if-statement">
+    <h2>Example 4: Conditional Logic</h2>
+    <p>This program checks if a number is greater than 50 and displays a message accordingly.</p>
+    <pre><code>IDENTIFICATION DIVISION.
+PROGRAM-ID. CheckNumber.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 Number PIC 9(3).
+
+PROCEDURE DIVISION.
+  DISPLAY 'Enter a number: '.
+  ACCEPT Number.
+
+  IF Number > 50 THEN
+      DISPLAY 'The number is greater than 50.'
+  ELSE
+      DISPLAY 'The number is 50 or less.'
+  END-IF.
+
+  STOP RUN.</code></pre>
+  </div>
+
+  <div class="section" id="loops">
+    <h2>Example 5: Loops Using PERFORM</h2>
+    <p>This program loops from 1 to 5 and displays the current loop counter value.</p>
+    <pre><code>IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 Counter PIC 9(1).
+
+PROCEDURE DIVISION.
+  MOVE 1 TO Counter.
+
+  PERFORM UNTIL Counter > 5
+      DISPLAY 'Counter: ' Counter
+      ADD 1 TO Counter
+  END-PERFORM.
+
+  STOP RUN.</code></pre>
+  </div>
+
+  <div class="section" id="arrays">
+    <h2>Example 6: Working with Arrays</h2>
+    <p>This program defines an array of 5 student scores and displays them.</p>
+    
+    <pre><code>IDENTIFICATION DIVISION.
+  PROGRAM-ID. ArrayExample.
+  
+  DATA DIVISION.
+  WORKING-STORAGE SECTION.
+  01 StudentScores.
+      05 Score PIC 9(3) OCCURS 5 TIMES.
+  01 Counter PIC 9(1).
+  
+  PROCEDURE DIVISION.
+      MOVE 90 TO Score(1).
+      MOVE 85 TO Score(2).
+      MOVE 88 TO Score(3).
+      MOVE 92 TO Score(4).
+      MOVE 75 TO Score(5).
+  
+      PERFORM VARYING Counter FROM 1 BY 1 UNTIL Counter > 5
+          DISPLAY 'Student ' Counter ' score: ' Score(Counter)
+      END-PERFORM.
+  
+      STOP RUN.</code></pre>
+  </div>
+
+  <div class="section" id="file-io">
+    <h2>Example 7: File Handling</h2>
+    <p>This program reads and writes to a file.</p>
+    <pre><code>IDENTIFICATION DIVISION.
+PROGRAM-ID. FileIOExample.
+
+ENVIRONMENT DIVISION.
+INPUT-OUTPUT SECTION.
+FILE-CONTROL.
+  SELECT StudentFile ASSIGN TO 'students.txt'
+  ORGANIZATION IS LINE SEQUENTIAL.
+
+DATA DIVISION.
+FILE SECTION.
+FD StudentFile.
+01 StudentRecord PIC X(50).
+
+WORKING-STORAGE SECTION.
+01 WS-Student PIC X(50).
+
+PROCEDURE DIVISION.
+  OPEN OUTPUT StudentFile.
+  MOVE 'John Doe' TO WS-Student.
+  WRITE StudentRecord FROM WS-Student.
+  CLOSE StudentFile.
+
+  OPEN INPUT StudentFile.
+  READ StudentFile INTO WS-Student.
+  DISPLAY 'Read from file: ' WS-Student.
+  CLOSE StudentFile.
+
+  STOP RUN.</code></pre>
+  </div>
+
+  <div class="section" id="error-handling">
+    <h2>Example 8: Error Handling</h2>
+    <p>This program demonstrates simple error handling by checking for division by zero.</p>
+    <pre><code>IDENTIFICATION DIVISION.
+PROGRAM-ID. ErrorHandlingExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 Number1 PIC 9(2).
+01 Number2 PIC 9(2).
+01 Result PIC 9(3).
+
+PROCEDURE DIVISION.
+  MOVE 10 TO Number1.
+  MOVE 0 TO Number2.
+
+  IF Number2 = 0 THEN
+      DISPLAY 'Error: Division by zero.'
+  ELSE
+      DIVIDE Number1 BY Number2 GIVING Result
+      DISPLAY 'Result: ' Result
+  END-IF.
+
+  STOP RUN.</code></pre>
+  </div>
+  <div class="section" id="payment-processing">
+    <h2>Example 9: Simple Payment Processing</h2>
+    <p>This program simulates a simple payment processing system. It accepts a payment and checks if the user has enough balance. If the balance is sufficient, it deducts the payment amount; otherwise, it shows an error.</p>
+  
+    <pre><code>IDENTIFICATION DIVISION.
+  PROGRAM-ID. SimplePaymentProcessing.
+  
+  DATA DIVISION.
+  WORKING-STORAGE SECTION.
+  01 CustomerBalance PIC 9(5)V99 VALUE 1000.50.
+  01 PaymentAmount PIC 9(5)V99.
+  01 RemainingBalance PIC 9(5)V99.
+  
+  PROCEDURE DIVISION.
+    DISPLAY 'Customer Balance: ' CustomerBalance.
+    
+    DISPLAY 'Enter Payment Amount: '.
+    ACCEPT PaymentAmount.
+    
+    IF PaymentAmount > CustomerBalance THEN
+        DISPLAY 'Error: Payment exceeds available balance.'
+    ELSE
+        SUBTRACT PaymentAmount FROM CustomerBalance GIVING RemainingBalance
+        DISPLAY 'Payment processed. Remaining Balance: ' RemainingBalance
+    END-IF.
+  
+    STOP RUN.</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   <div class="part" id="part1">
     <h1>Part I—COBOL Program Basics</h1>
