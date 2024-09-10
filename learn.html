@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learn COBOL</title>
+  
+  <!-- Navigation Bar Stylesheet -->
+  <link href="css/nav.css" rel="stylesheet">
+
+  <style>
+    .section {
+      margin-bottom: 30px;
+      padding-top: 60px; /* Adjust this value to create space for topic navigation */
+    }
+    .section h2 {
+      color: #333;
+    }
+    .section pre {
+      background-color: #f8f8f8;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    #topic-nav {
+      position: sticky;
+      top: 0;
+      background-color: #f8f8f8;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    #topic-nav ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+    }
+    #topic-nav ul li {
+      margin-right: 20px;
+    }
+    #topic-nav ul li a {
+      text-decoration: none;
+      color: #333;
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+    #topic-nav ul li a:hover {
+      background-color: #ddd;
+    }
+    .part {
+      margin-bottom: 50px;
+      border-bottom: 2px solid #333;
+      padding-bottom: 20px;
+    }
+    .part h1 {
+      color: #0066cc;
+      font-size: 2.5em;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="course.html">Course</a></li>
+      <li><a href="learn.html">Learn</a></li>
+    </ul>
+  </nav>
+
+  <h1>Learn COBOL</h1>
+
+  <div id="topic-nav">
+    <ul>
+      <li><a href="#part1">Part I:COBOL  Basics</a></li>
+      <li><a href="#part2">Part II:File Handling</a></li>
+      <li><a href="#part3">Part III:Business Processing</a></li>
+      <li><a href="#part4">Part IV:Miscellaneous Functions</a></li>
+      <li><a href="#part5">Part V:Advanced Topics</a></li>
+    </ul>
+  </div>
+
+  <div class="part" id="part1">
+    <h1>Part I—COBOL Program Basics</h1>
+
+    <div class="section" id="intro">
+      <h2>Introduction to COBOL</h2>
+      <p>COBOL (Common Business Oriented Language) is a high-level programming language designed for business applications. It was first introduced in 1959 and has been widely used in industries such as finance, government, and business data processing.</p>
+      <p>COBOL emphasizes structured programming, readability, and maintainability, making it suitable for large-scale and mission-critical applications. Despite its age, COBOL continues to be used in many legacy systems and is still taught in some computer science programs.</p>
+    </div>
+
+    <div class="section" id="syntax">
+      <h2>COBOL Syntax and Structure</h2>
+      <p>A COBOL program is divided into four main divisions:</p>
+      <ol>
+        <li><strong>Identification Division</strong>: Provides information about the program, such as its name and author.</li>
+        <li><strong>Environment Division</strong>: Describes the hardware and software environment in which the program will run.</li>
+        <li><strong>Data Division</strong>: Defines the data structures and variables used in the program.</li>
+        <li><strong>Procedure Division</strong>: Contains the executable statements that perform the program's logic.</li>
+      </ol>
+      <pre><code>IDENTIFICATION DIVISION.
+PROGRAM-ID. HelloWorld.
+
+PROCEDURE DIVISION.
+    DISPLAY 'Hello, World!'.
+    STOP RUN.</code></pre>
+    </div>
+
+    <div class="section" id="data-types">
+      <h2>Data Types and Variables</h2>
+      <p>COBOL supports various data types, including numeric and alphanumeric data. Variables are declared in the Data Division using level numbers and data description entries.</p>
+      <pre><code>DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 StudentName PIC X(20).
+01 StudentAge PIC 99.</code></pre>
+    </div>
+
+    <div class="section" id="purpose-history">
+      <h2>COBOL Purpose and History</h2>
+      <p>COBOL (Common Business Oriented Language) was developed in 1959 to meet the needs of business data processing. Its creation was driven by the need for a high-level programming language to handle data-centric applications, particularly in business and government.</p>
+      <p>COBOL has been used for decades in mission-critical systems, such as banking, insurance, and government services, and is still widely used in legacy systems today.</p>
+    </div>
+
+    <div class="section" id="language-of-business">
+      <h2>COBOL: The Language of Business</h2>
+      <p>COBOL was designed for business data processing, making it ideal for applications that handle large volumes of data. Its readability, strict format, and structure made it a preferred choice for large corporations and government institutions.</p>
+      <p>COBOL's syntax closely resembles the English language, making it more accessible for business analysts and non-programmers to understand.</p>
+    </div>
+
+    <div class="section" id="origin-grace-hopper">
+      <h2>Grace Hopper and the Origin of COBOL</h2>
+      <p>Grace Hopper, a pioneering computer scientist, played a significant role in the development of COBOL. She contributed to the creation of early compilers and advocated for machine-independent programming languages, which led to COBOL's design.</p>
+      <p>Hopper's work laid the foundation for the development of COBOL, and she is often credited as one of the key figures in the history of the language.</p>
+    </div>
+
+    <div class="section" id="program-layout">
+      <h2>COBOL Program Layout</h2>
+      <p>A COBOL program is structured into four main divisions, each serving a different purpose. These divisions are:</p>
+      <ul>
+        <li><strong>Identification Division:</strong> Provides metadata about the program, such as its name, author, and version.</li>
+        <li><strong>Environment Division:</strong> Describes the environment in which the program is running, such as hardware and software configurations.</li>
+        <li><strong>Data Division:</strong> Defines all variables, data structures, and constants used in the program.</li>
+        <li><strong>Procedure Division:</strong> Contains the code logic and instructions to execute the program.</li>
+      </ul>
+      <pre><code>IDENTIFICATION DIVISION.
+PROGRAM-ID. HelloWorld.
+
+ENVIRONMENT DIVISION.
+
+DATA DIVISION.
+
+PROCEDURE DIVISION.
+    DISPLAY 'Hello, World!'.
+    STOP RUN.</code></pre>
+    </div>
+
+    <div class="section" id="different-data-types">
+      <h2>COBOL Data Types and The Picture Clause</h2>
+      <p>COBOL supports various data types, primarily focused on business data such as numbers, strings, and edited fields. Variables are declared in the Data Division using level numbers and the <strong>PICTURE</strong> (PIC) clause, which defines the structure of the variable.</p>
+      <ul>
+        <li><strong>Numeric Fields:</strong> Used for storing numbers, either whole or with decimal points.</li>
+        <li><strong>Alphanumeric Fields:</strong> Used for storing text or a mix of numbers and characters.</li>
+        <li><strong>Edited Fields:</strong> Variables that format output for display purposes (e.g., adding commas to a number).</li>
+      </ul>
+      <pre><code>01 Price       PIC 9(5)V99.  *> Numeric field with 5 digits and 2 decimal places
+01 CustomerName PIC X(20).    *> Alphanumeric field with a maximum length of 20 characters</code></pre>
+    </div>
+
+    <div class="section" id="accepting-input">
+      <h2>Accepting User Input in COBOL</h2>
+      <p>COBOL allows interaction with the user through the <strong>ACCEPT</strong> statement, which captures input from the user at runtime. Data can be accepted from the console or other sources, such as files or system variables.</p>
+      <pre><code>PROCEDURE DIVISION.
+    DISPLAY 'Enter your name: '.
+    ACCEPT CustomerName.
+    DISPLAY 'Hello, ' CustomerName.</code></pre>
+    </div>
+
+    <div class="section" id="manipulating-data">
+      <h2>Manipulating Data in COBOL</h2>
+      <p>In COBOL, you can manipulate data using a variety of statements such as <strong>MOVE</strong>, <strong>ADD</strong>, <strong>SUBTRACT</strong>, <strong>MULTIPLY</strong>, and <strong>DIVIDE</strong>.</p>
+      <ul>
+        <li><strong>MOVE:</strong> Transfers data from one variable to another.</li>
+        <li><strong>ADD, SUBTRACT, MULTIPLY, DIVIDE:</strong> Perform arithmetic operations.</li>
+        <li><strong>COMPUTE:</strong> A general-purpose arithmetic operation, often used for complex calculations.</li>
+      </ul>
+      <pre><code>PROCEDURE DIVISION.
+    MOVE 10 TO Number1.
+    ADD 5 TO Number1 GIVING Total.
+    DISPLAY 'Total: ' Total.</code></pre>
+    </div>
+
+    <div class="section" id="conditional-statements">
+      <h2>Conditional Statements in COBOL</h2>
+      <p>COBOL uses the <strong>IF</strong> statement to perform conditional logic. It supports nested conditions and the use of <strong>88 levels</strong> for specific value checks.</p>
+      <pre><code>IF Amount > 1000
+    DISPLAY 'High Amount'
+ELSE
+    DISPLAY 'Normal Amount'.</code></pre>
+    </div>
+
+    <div class="section" id="loops-perform">
+      <h2>Loops and Perform Statements</h2>
+      <p>COBOL uses the <strong>PERFORM</strong> statement to create loops. These loops can be used to repeat a section of code a specific number of times or until a condition is met.</p>
+      <pre><code>PERFORM UNTIL Counter > 10
+    ADD 1 TO Counter
+    DISPLAY 'Counter: ' Counter
+END-PERFORM.</code></pre>
+    </div>
+
+    <div class="section" id="tables">
+      <h2>Tables in COBOL</h2>
+      <p>COBOL supports single-dimensional and multi-dimensional arrays, which are referred to as <strong>tables</strong> in COBOL. They are defined using the <strong>OCCURS</strong> clause.</p>
+      <pre><code>01 StudentScores.
+    05 Score PIC 9(3) OCCURS 10 TIMES.</code></pre>
+    </div>
+  </div>
+
+  <div class="part" id="part2">
+    <h1>Part II—File Handling</h1>
+
+    <div class="section" id="sequential-files">
+      <h2>Sequential Files</h2>
+      <p>In COBOL, sequential files are used to store data in a sequence, with each record following the previous one. Sequential files are the most common file format for reading and writing data in a linear order.</p>
+      <p>The key steps for working with sequential files are:</p>
+      <ul>
+        <li><strong>SELECT Statement:</strong> Connects your program to the external file.</li>
+        <li><strong>OPEN Statement:</strong> Prepares the file for reading, writing, or both.</li>
+        <li><strong>READ Statement:</strong> Reads data from the file into a COBOL variable.</li>
+        <li><strong>WRITE Statement:</strong> Writes data from COBOL variables into the file.</li>
+        <li><strong>CLOSE Statement:</strong> Closes the file once processing is complete.</li>
+      </ul>
+      <pre><code>SELECT CustomerFile ASSIGN TO 'customer.dat'.
+FD CustomerFile.
+01 CustomerRecord.
+   05 CustomerID      PIC 9(5).
+   05 CustomerName    PIC X(20).
+
+PROCEDURE DIVISION.
+   OPEN INPUT CustomerFile.
+   READ CustomerFile INTO CustomerRecord.
+   DISPLAY 'Customer: ' CustomerName.
+   CLOSE CustomerFile.</code></pre>
+    </div>
+
+    <div class="section" id="indexed-files">
+      <h2>Indexed Files</h2>
+      <p>Indexed files in COBOL allow random access to records by associating each record with a key. These files are ideal for databases or applications where you need quick access to specific records.</p>
+      <p>Key steps for using indexed files:</p>
+      <ul>
+        <li><strong>Defining the file:</strong> Use the <strong>SELECT</strong> statement to specify the key field.</li>
+        <li><strong>Reading records:</strong> You can read records in sequence or by searching for a specific key.</li>
+        <li><strong>Creating or updating records:</strong> Write new records to the file or update existing ones using the key.</li>
+      </ul>
+      <pre><code>SELECT IndexedCustomerFile ASSIGN TO 'customer.dat'
+    ORGANIZATION IS INDEXED
+    ACCESS MODE IS DYNAMIC
+    RECORD KEY IS CustomerID.
+FD IndexedCustomerFile.
+01 CustomerRecord.
+   05 CustomerID      PIC 9(5).
+   05 CustomerName    PIC X(20).
+
+PROCEDURE DIVISION.
+   OPEN I-O IndexedCustomerFile.
+   READ IndexedCustomerFile KEY IS CustomerID.
+   DISPLAY 'Customer: ' CustomerName.
+   CLOSE IndexedCustomerFile.</code></pre>
+    </div>
+
+    <div class="section" id="reading-indexed-files">
+      <h2>Reading Indexed File Records</h2>
+      <p>Reading records from an indexed file can be done in three different ways:</p>
+      <ul>
+        <li><strong>Sequential Access:</strong> Reads records in the order they were written.</li>
+        <li><strong>Random Access:</strong> Reads a specific record by searching for its key.</li>
+        <li><strong>Dynamic Access:</strong> Combines sequential and random access, allowing you to alternate between both methods as needed.</li>
+      </ul>
+      <pre><code>SELECT IndexedFile ASSIGN TO 'datafile.dat'
+    ORGANIZATION IS INDEXED
+    ACCESS MODE IS DYNAMIC
+    RECORD KEY IS CustomerID.
+
+PROCEDURE DIVISION.
+   OPEN I-O IndexedFile.
+   READ IndexedFile KEY IS CustomerID.
+   DISPLAY 'Customer ID: ' CustomerID ' Name: ' CustomerName.
+   CLOSE IndexedFile.</code></pre>
+    </div>
+
+    <div class="section" id="updating-indexed-files">
+      <h2>Updating Indexed File Records</h2>
+      <p>Updating indexed files in COBOL involves modifying existing records, adding new records, or deleting records. The <strong>REWRITE</strong> statement allows you to update a record after reading it, while the <strong>DELETE</strong> statement removes a record.</p>
+      <pre><code>SELECT IndexedFile ASSIGN TO 'datafile.dat'
+    ORGANIZATION IS INDEXED
+    ACCESS MODE IS DYNAMIC
+    RECORD KEY IS CustomerID.
+
+PROCEDURE DIVISION.
+   OPEN I-O IndexedFile.
+   READ IndexedFile KEY IS CustomerID.
+   MOVE 'New Name' TO CustomerName.
+   REWRITE CustomerRecord.
+   CLOSE IndexedFile.</code></pre>
+    </div>
+
+    <div class="section" id="sorting-files">
+      <h2>Sorting Files</h2>
+      <p>Sorting in COBOL involves rearranging the records in a file according to a specific key, such as customer ID or name. The <strong>SORT</strong> statement allows you to define the key and the input/output procedures for sorting data.</p>
+      <pre><code>SORT SortedCustomerFile
+    ON ASCENDING KEY CustomerID
+    USING CustomerFile
+    GIVING SortedOutputFile.
+
+PROCEDURE DIVISION.
+   OPEN INPUT CustomerFile.
+   SORT SortedCustomerFile
+       ON ASCENDING KEY CustomerID
+       USING CustomerFile
+       GIVING SortedOutputFile.
+   CLOSE CustomerFile.</code></pre>
+    </div>
+  </div>
+
+  <div class="part" id="part3">
+    <h1>Part III—Business Processing</h1>
+
+    <div class="section" id="master-file-updating">
+      <h2>Master File Updating</h2>
+      <p>Master file updating is a critical business process in COBOL applications. It involves processing transaction records to update a master file, such as updating customer records with new purchases or payments.</p>
+      <pre><code>PROCEDURE DIVISION.
+   OPEN I-O MasterFile.
+   OPEN INPUT TransactionFile.
+
+   PERFORM UNTIL END-OF-TRANSACTION
+       READ TransactionFile INTO TransactionRecord
+       AT END MOVE 'YES' TO END-OF-TRANSACTION
+       NOT AT END
+           READ MasterFile KEY IS CustomerID
+           REWRITE MasterRecord.
+   CLOSE MasterFile.
+   CLOSE TransactionFile.</code></pre>
+    </div>
+
+    <div class="section" id="reporting">
+      <h2>Creating Reports in COBOL</h2>
+      <p>COBOL excels in generating detailed reports for business applications. The <strong>WRITE</strong> statement is used to print records formatted for reports, and you can control page breaks, headings, and the structure of the report.</p>
+      <pre><code>PROCEDURE DIVISION.
+   OPEN OUTPUT ReportFile.
+   WRITE ReportRecord FROM Header.
+   PERFORM UNTIL END-OF-REPORT
+       READ DataFile INTO DataRecord
+       AT END MOVE 'YES' TO END-OF-REPORT
+       NOT AT END
+           WRITE ReportRecord FROM DataRecord.
+   CLOSE ReportFile.</code></pre>
+    </div>
+
+    <div class="section" id="advanced-reporting">
+      <h2>Advanced Reporting</h2>
+      <p>Advanced reporting in COBOL includes handling <strong>control breaks</strong>, where the report is grouped and subtotaled based on key values. Control breaks allow you to summarize data within groups (e.g., totals by department or region).</p>
+      <p>Other advanced techniques include managing multiple control breaks, subtotals, and calculating grand totals.</p>
+      <pre><code>PROCEDURE DIVISION.
+   OPEN INPUT SalesFile.
+   MOVE 0 TO TotalAmount.
+   PERFORM UNTIL EOF
+       READ SalesFile INTO SalesRecord
+       AT END SET EOF TO TRUE
+       NOT AT END
+           IF SalesRegion NOT = PrevSalesRegion
+               DISPLAY 'Region Subtotal: ' Subtotal
+               MOVE 0 TO Subtotal
+           END-IF
+           ADD SalesAmount TO Subtotal
+           ADD SalesAmount TO TotalAmount
+           MOVE SalesRegion TO PrevSalesRegion.
+   CLOSE SalesFile.
+   DISPLAY 'Grand Total: ' TotalAmount.</code></pre>
+    </div>
+  </div>
+
+  <div class="part" id="part4">
+    <h1>Part IV—Miscellaneous Functions</h1>
+
+    <div class="section" id="date-manipulation">
+      <h2>Date Manipulation</h2>
+      <p>COBOL includes intrinsic functions for working with dates, such as determining the current system date or calculating the number of days between dates. These functions are important for applications that process dates for billing, payroll, and reporting.</p>
+      <ul>
+        <li><strong>CURRENT-DATE:</strong> Retrieves the current date and time.</li>
+        <li><strong>INTEGER-OF-DATE:</strong> Converts a date to an integer for calculations.</li>
+        <li><strong>DATE-OF-INTEGER:</strong> Converts an integer back to a date.</li>
+      </ul>
+      <pre><code>PROCEDURE DIVISION.
+   MOVE FUNCTION CURRENT-DATE TO CurrentDate.
+   DISPLAY 'Today''s Date: ' CurrentDate.
+
+   MOVE FUNCTION INTEGER-OF-DATE (20230901) TO DateInt.
+   DISPLAY 'Days since 1/1/1601: ' DateInt.
+
+   MOVE FUNCTION DATE-OF-INTEGER (DateInt) TO ActualDate.
+   DISPLAY 'Converted Date: ' ActualDate.</code></pre>
+    </div>
+
+    <div class="section" id="intrinsic-functions">
+      <h2>Other Intrinsic Functions</h2>
+      <p>COBOL provides a range of intrinsic functions for performing mathematical, statistical, financial, and string manipulations. These functions simplify calculations and string handling within your programs.</p>
+      <ul>
+        <li><strong>NUMVAL:</strong> Converts alphanumeric data to numeric.</li>
+        <li><strong>MAX:</strong> Returns the maximum value from a list of numbers.</li>
+        <li><strong>SUBSTR:</strong> Extracts a substring from a string.</li>
+        <li><strong>REVERSE:</strong> Reverses the order of characters in a string.</li>
+      </ul>
+      <pre><code>PROCEDURE DIVISION.
+   MOVE '123' TO AlphanumericValue.
+   COMPUTE NumericValue = FUNCTION NUMVAL (AlphanumericValue).
+   DISPLAY 'Numeric Value: ' NumericValue.
+
+   COMPUTE MaximumValue = FUNCTION MAX (5, 10, 15).
+   DISPLAY 'Maximum Value: ' MaximumValue.
+
+   MOVE FUNCTION REVERSE ('COBOL') TO ReversedString.
+   DISPLAY 'Reversed String: ' ReversedString.</code></pre>
+    </div>
+  </div>
+
+  <div class="part" id="part5">
+    <h1>Part V—Advanced Topics</h1>
+
+    <div class="section" id="call-interface">
+      <h2>The Call Interface</h2>
+      <p>COBOL supports calling external programs or subprograms using the <strong>CALL</strong> statement. This allows you to build modular programs where tasks are separated into individual subprograms. Data can be passed between programs via the <strong>LINKAGE SECTION</strong>.</p>
+      <p>The <strong>CALL BY REFERENCE</strong> and <strong>CALL BY CONTENT</strong> methods determine how data is passed between the calling and called programs.</p>
+      <pre><code>PROCEDURE DIVISION.
+   CALL 'SubProgram' USING BY REFERENCE DataItem1
+                            BY CONTENT DataItem2.
+   DISPLAY 'Returned from SubProgram'.</code></pre>
+    </div>
+
+    <div class="section" id="graphical-user-interface">
+      <h2>The Graphical User Interface (GUI)</h2>
+      <p>Although COBOL is traditionally used for text-based applications, some implementations allow for graphical user interfaces (GUIs) to be built. Using libraries like <strong>sp2</strong>, you can design panels, windows, and user-friendly interfaces for COBOL applications.</p>
+      <p>While GUIs are less common in COBOL applications, they are sometimes used in modernized or hybrid systems that combine COBOL with web or graphical components.</p>
+      <pre><code>PROCEDURE DIVISION.
+   CALL 'sp2Start'.
+   CALL 'sp2CreatePanel' USING PanelID, 'MyPanel'.
+   CALL 'sp2ShowPanel' USING PanelID.
+   DISPLAY 'GUI Initialized'.</code></pre>
+    </div>
+
+    <div class="section" id="future-of-cobol">
+      <h2>The Future of COBOL</h2>
+      <p>Despite its age, COBOL continues to play a crucial role in enterprise systems, especially in sectors like banking, insurance, and government. Efforts to modernize COBOL applications, integrate them with newer technologies, and train a new generation of developers ensure that COBOL will remain relevant for years to come.</p>
+      <p>Technologies like cloud computing, API integration, and modernization tools are enabling COBOL applications to work seamlessly with modern architectures, extending their lifespan in the business world.</p>
+    </div>
+  </div>
+
+</body>
+</html>
