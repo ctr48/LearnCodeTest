@@ -138,7 +138,86 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
     <!-- Template Javascript -->
-    <script src="js/main.js"></script>
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+        apiKey: "AIzaSyCRG4zTvQatqvgz46nTXXao0-qSWr5u3gA",
+        authDomain: "learncobol-452ff.firebaseapp.com",
+        projectId: "learncobol-452ff",
+        storageBucket: "learncobol-452ff.appspot.com",
+        messagingSenderId: "785464884209",
+        appId: "1:785464884209:web:d4ed745c0d8571ac322250",
+        measurementId: "G-7QVF8EY1NT"
+            // Your Firebase configuration goes here
+        };
+
+        firebase.initializeApp(firebaseConfig);
+
+        // Get references to the login and signup forms
+        const loginForm = document.getElementById('loginForm');
+        const signupForm = document.getElementById('signupForm');
+
+        // Add event listeners to the login and signup forms
+        loginForm.addEventListener('submit', handleLogin);
+        signupForm.addEventListener('submit', handleSignup);
+
+        // Define the login and signup event handlers
+        async function handleLogin(event) {
+            event.preventDefault();
+
+            // Get the email and password from the login form
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                // Sign in the user with Firebase Authentication
+                await firebase.auth().signInWithEmailAndPassword(email, password);
+
+                // Display the user's information
+                const user = firebase.auth().currentUser;
+                document.getElementById('userName').textContent = user.displayName;
+                document.getElementById('userInfo').style.display = 'block';
+            } catch (error) {
+                // Display the error message
+                document.getElementById('loginError').textContent = error.message;
+                document.getElementById('loginError').classList.remove('d-none');
+            }
+        }
+
+        async function handleSignup(event) {
+            event.preventDefault();
+
+            // Get the name, email, and password from the signup form
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('signupConfirmPassword').value;
+
+            // Validate the password and confirm password
+            if (password !== confirmPassword) {
+                document.getElementById('signupError').textContent = 'Passwords do not match.';
+                document.getElementById('signupError').classList.remove('d-none');
+                return;
+            }
+
+            try {
+                // Create a new user with Firebase Authentication
+                const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+
+                // Update the user's display name
+                await user.updateProfile({ displayName: name });
+
+                // Display the user's information
+                document.getElementById('userName').textContent = name;
+                document.getElementById('userInfo').style.display = 'block';
+            } catch (error) {
+                // Display the error message
+                document.getElementById('signupError').textContent = error.message;
+                document.getElementById('signupError').classList.remove('d-none');
+            }
+        }
+    </script>
 </body>
 
 </html>

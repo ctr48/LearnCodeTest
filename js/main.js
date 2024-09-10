@@ -1,3 +1,6 @@
+
+
+
 // Smooth Scrolling for Topic Links
 const topicLinks = document.querySelectorAll('#topic-nav a');
 

@@ -9,7 +9,7 @@ body {
   font-family: "Open Sans", Arial, sans-serif;
   line-height: 1.6;
   color: #333;
-  background-color: #f4f4f4;
+  background-color: #e4dada;
 }
 
 /* Header styles */
@@ -44,7 +44,7 @@ main {
   max-width: 800px;
   margin: 30px auto;
   padding: 0 20px;
-  background-color: #fff;
+  background-color: #ef4848;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
