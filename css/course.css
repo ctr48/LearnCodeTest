@@ -1,117 +1,265 @@
-/* Reset default styles */
-body, h1, h2, h3, p, ul {
+/* Navigation Bar */
+nav {
+  background-color: #343a40;
+  padding: 10px 0;
+  text-align: center;
+}
+
+nav ul {
+  list-style-type: none;
   margin: 0;
   padding: 0;
 }
 
-/* Basic styles */
-body {
-  font-family: "Open Sans", Arial, sans-serif;
-  line-height: 1.6;
-  color: #333;
-  background-color: #e4dada;
-}
-
-/* Header styles */
-header {
-  background-color: #00796B;
-  color: #fff;
-  padding: 20px;
-  text-align: center;
-}
-
-header h1 {
-  font-size: 2.5em;
-  margin-bottom: 10px;
-}
-
-nav ul {
-  list-style: none;
-}
-
 nav ul li {
   display: inline;
-  margin-right: 15px;
+  margin-right: 20px;
 }
 
 nav ul li a {
-  color: #fff;
+  color: white;
   text-decoration: none;
+  font-size: 18px;
+  padding: 8px 16px;
 }
 
-/* Main content styles */
-main {
-  max-width: 800px;
-  margin: 30px auto;
-  padding: 0 20px;
-  background-color: #ef4848;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+nav ul li a:hover {
+  background-color: #495057;
+  border-radius: 4px;
 }
 
-section {
-  margin-bottom: 40px;
+/* Main Content */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f8f9fa;
+  margin: 0;
+  padding: 0;
 }
 
-h2 {
-  font-size: 2.5em;
-  color: #004D40;
-  margin-bottom: 15px;  
+#userInfo {
+  margin: 20px;
+  text-align: right;
 }
 
-ul {
-  margin-left: 30px;
+#userInfo span {
+  font-size: 20px;
+  margin-right: 20px;
 }
 
-/* Highlighted text */
-.highlight {
-  background-color: #B2DFDB;
-  padding: 2px 5px;
-  border-radius: 3px;
+#userInfo button {
+  margin-right: 10px;
 }
 
-/* Editor styles */
-#cobolInput {
-  width: 100%;
-  height: 200px;
-  padding: 10px;
-  font-family: "Courier New", monospace;
-  font-size: 14px;
-  background-color: #f5f5f5;
-  border: 1px solid #ddd;
-  margin-bottom: 20px;
-}
-
-#cobolDisplay {
-  padding: 10px;
-  background-color: #4DB6AC;
-  color: #fff;
-  font-family: monospace;
-  white-space: pre-wrap;
-}
-
-/* Footer styles */
-footer {
-  background-color: #333;
-  color: #fff;
-  padding: 15px;
+#courseContent {
+  margin: 20px;
   text-align: center;
 }
 
-footer p {
-  font-size: 0.9em;  
+h1 {
+  font-size: 2.5em;
+  color: #343a40;
 }
 
-/* Responsive styles */
-@media screen and (max-width: 600px) {
-  header h1 {
-    font-size: 1.5em;
+h2 {
+  font-size: 2em;
+  color: #007bff;
+  margin-bottom: 20px;
+}
+
+.stats p {
+  font-size: 1.2em;
+  margin: 5px;
+}
+
+/* Challenge Navigation Buttons */
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+#nextButton,
+#prevButton {
+  background-color: #007bff;
+  color: white;
+}
+
+#markAsCorrectButton,
+#showExpectedOutputButton {
+  background-color: #28a745;
+  color: white;
+}
+
+.hidden {
+  display: none;
+}
+
+.correct {
+  color: green;
+}
+
+.incorrect {
+  color: red;
+}
+
+#challengeText {
+  font-size: 1000em;
+  margin-top: 30px;
+}
+
+#challengeDifficulty {
+  font-size: 1.2em;
+  margin-top: 10px;
+}
+
+#expectedOutput {
+  font-size: 1.2em;
+  margin-top: 20px;
+}
+
+#outputResult,
+#answerResult {
+  margin-top: 20px;
+  font-size: 1.3em;
+}
+
+/* Challenge List */
+#challengeList {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 30px;
+}
+
+#challengeList li {
+  background-color: #ffffff;
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: left;
+}
+
+#challengeList li:hover {
+  background-color: #e9ecef;
+}
+
+#challengeList li.correct {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+#challengeList li.incorrect {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+/* Difficulty Badge */
+.difficulty {
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+.Easy {
+  color: green;
+}
+
+.Medium {
+  color: orange;
+}
+
+.Hard {
+  color: red;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  #challengeText,
+  #challengeDifficulty,
+  #outputResult,
+  #answerResult {
+    font-size: 1.2em;
   }
 
-  main {
-    margin: 20px auto;
+  button {
+    font-size: 14px;
+    padding: 8px 16px;
   }
 
-  h2 {
-    font-size: 1.5em;
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.stat-item {
+  text-align: center;
+  margin: 10px;
+  padding: 15px;
+  width: 100%;
+  max-width: 200px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.stat-item p {
+  font-size: 1.2em;
+  margin: 0;
+  color: #343a40;
+}
+
+.stat-item p#total-correct {
+  font-weight: bold;
+  color: #28a745;
+}
+
+.stat-item p#percentage-correct {
+  font-weight: bold;
+  color: #007bff;
+}
+
+.stat-item p#total-easy {
+  font-weight: bold;
+  color: green;
+}
+
+.stat-item p#total-medium {
+  font-weight: bold;
+  color: orange;
+}
+
+.stat-item p#total-hard {
+  font-weight: bold;
+  color: red;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .stats {
+    flex-direction: column;
   }
+
+  .stat-item {
+    width: 100%;
+    margin: 10px 0;
+  }
+}
+
+
+
+
+
+
 }

@@ -63,12 +63,12 @@
   <nav>
     <ul>
       <li><a href="index.html">Home</a></li>
-      <li><a href="course.html">100 Challenges</a></li>
+      <li><a href="course.html">Practice</a></li>
       <li><a href="learn.html">Learn</a></li>
     </ul>
   </nav>
 
-  <h1>Learn COBOL</h1>
+  <h1 style="margin-top: 50px;"> Learn COBOL </h1>
 
   <div id="topic-nav">
     <ul>
@@ -704,16 +704,6 @@ PROCEDURE DIVISION.
    DISPLAY 'Returned from SubProgram'.</code></pre>
     </div>
 
-    <div class="section" id="graphical-user-interface">
-      <h2>The Graphical User Interface (GUI)</h2>
-      <p>Although COBOL is traditionally used for text-based applications, some implementations allow for graphical user interfaces (GUIs) to be built. Using libraries like <strong>sp2</strong>, you can design panels, windows, and user-friendly interfaces for COBOL applications.</p>
-      <p>While GUIs are less common in COBOL applications, they are sometimes used in modernized or hybrid systems that combine COBOL with web or graphical components.</p>
-      <pre><code>PROCEDURE DIVISION.
-   CALL 'sp2Start'.
-   CALL 'sp2CreatePanel' USING PanelID, 'MyPanel'.
-   CALL 'sp2ShowPanel' USING PanelID.
-   DISPLAY 'GUI Initialized'.</code></pre>
-    </div>
 
     <div class="section" id="future-of-cobol">
       <h2>The Future of COBOL</h2>
