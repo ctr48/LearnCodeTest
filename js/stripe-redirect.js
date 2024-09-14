@@ -3,24 +3,33 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 
-
-
-// Initialize Firebase (make sure this matches the configuration in index.html)
-const firebaseConfig = {
-    apiKey: "AIzaSyCRG4zTvQatqvgz46nTXXao0-qSWr5u3gA",
-    authDomain: "learncobol-452ff.firebaseapp.com",
-    projectId: "learncobol-452ff",
-    storageBucket: "learncobol-452ff.appspot.com",
-    messagingSenderId: "785464884209",
-    appId: "1:785464884209:web:d4ed745c0d8571ac322250",
-    measurementId: "G-7QVF8EY1NT"
-};
-
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
+// Function to fetch Firebase configuration
+async function getFirebaseConfig() {
+    try {
+        const response = await fetch('/api/firebase-config');
+        if (!response.ok) {
+            throw new Error('Failed to fetch Firebase configuration');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching Firebase configuration:', error);
+        throw error;
+    }
 }
 
-const db = firebase.firestore();
+// Initialize Firebase
+async function initializeFirebase() {
+    try {
+        const firebaseConfig = await getFirebaseConfig();
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        return firebase.firestore();
+    } catch (error) {
+        console.error('Error initializing Firebase:', error);
+        throw error;
+    }
+}
 
 // Function to handle redirection after Stripe payment
 async function handleStripeRedirect() {
@@ -30,6 +39,7 @@ async function handleStripeRedirect() {
 
     if (success === 'true' && userId) {
         try {
+            const db = await initializeFirebase();
             // Update user's subscription status in Firestore
             await db.collection('users').doc(userId).update({
                 subscriptionStatus: 'Active'
