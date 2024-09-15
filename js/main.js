@@ -73,6 +73,22 @@ function updateChallengeUI(challenge) {
   }
 }
 
+// New function to handle redirection to Stripe payment page
+function redirectToStripePage() {
+  // Get the current user
+  const user = firebase.auth().currentUser;
+  if (user) {
+    // TODO: Replace with actual Stripe checkout session creation
+    // This is a placeholder URL. In a real implementation, you would create a Stripe checkout session
+    // on your server and redirect to the resulting URL.
+    const stripeCheckoutUrl = 'https://buy.stripe.com/bIY5li1fB6Qu4gM001';
+    window.location.href = stripeCheckoutUrl;
+  } else {
+    console.error('User not logged in');
+    alert('Please log in to upgrade to premium.');
+  }
+}
+
 // Check login state on page load
 document.addEventListener('DOMContentLoaded', function() {
   firebase.auth().onAuthStateChanged(function(user) {
@@ -122,6 +138,12 @@ document.addEventListener('DOMContentLoaded', function() {
           alert('Please check your email for account information.');
         });
       }
+      
+      // Add click event handler for Stripe button
+      const stripeButton = document.getElementById('stripeButton');
+      if (stripeButton) {
+        stripeButton.addEventListener('click', redirectToStripePage);
+      }
     } else {
       // User is not signed in, redirect to login page
       window.location.href = 'index.html';
@@ -151,3 +173,4 @@ topicLinks.forEach(link => {
 window.markAsCorrectFunction = markAsCorrectFunction;
 window.isQuestionCorrect = isQuestionCorrect;
 window.updateChallengeUI = updateChallengeUI;
+window.redirectToStripePage = redirectToStripePage;
