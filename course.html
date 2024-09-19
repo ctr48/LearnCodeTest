@@ -20,7 +20,7 @@
       background: linear-gradient(45deg, #1a1a2e, #16213e);
       color: #e94560;
     }
-    #nextButton, #showExpectedOutputButton, #markAsCorrectButton, #prevButton, #stripeButton {
+    #nextButton, #showExpectedOutputButton, #markAsCorrectButton, #prevButton, #stripeButton, #feedbackButton {
       margin-bottom: 40px;
       margin-right: 10px;
       background: linear-gradient(45deg, #0f3460, #e94560);
@@ -31,7 +31,7 @@
       cursor: pointer;
       transition: all 0.3s ease;
     }
-    #nextButton:hover, #showExpectedOutputButton:hover, #markAsCorrectButton:hover, #prevButton:hover, #stripeButton:hover {
+    #nextButton:hover, #showExpectedOutputButton:hover, #markAsCorrectButton:hover, #prevButton:hover, #stripeButton:hover, #feedbackButton:hover {
       transform: translateY(-3px);
       box-shadow: 0 5px 15px rgba(233, 69, 96, 0.4);
     }
@@ -100,6 +100,38 @@
       flex: 1;
       text-align: center;
     }
+    #feedbackModal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.4);
+    }
+    .modal-content {
+      background-color: #16213e;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 600px;
+      border-radius: 10px;
+    }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .close:hover,
+    .close:focus {
+      color: #e94560;
+      text-decoration: none;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -125,7 +157,6 @@
 
     <div class="stats">
       <p id="total-correct"></p>
-      <p id="percentage-correct"></p>
       <p id="total-easy"></p>
       <p id="total-medium"></p>
       <p id="total-hard"></p>
@@ -144,6 +175,9 @@
     <button id="showExpectedOutputButton" onclick="showExpectedOutput()">Show Expected Output</button>
     <button id="markAsCorrectButton" onclick="markAsCorrect()">Mark as Correct</button>
 
+    <!-- New Feedback Button -->
+    <button id="feedbackButton" onclick="openFeedbackModal()">Give Feedback</button>
+
     <!-- Updated Stripe button -->
     <button id="stripeButton" onclick="redirectToStripePage()">Buy me a coffee</button>
 
@@ -155,6 +189,15 @@
 
     <h3>All Challenges</h3>
     <ul id="challengeList"></ul>
+  </div>
+
+  <!-- Feedback Modal -->
+  <div id="feedbackModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Provide Feedback</h2>
+      <iframe src="https://forms.gle/kc7oZU43AGNdTurv6" width="100%" height="500" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+    </div>
   </div>
  
   <script src="js/main.js"></script>
@@ -172,14 +215,16 @@
    
     // Load challenges
     const challenges = [
-      {
-        id: 1,
-        text: 'Write a COBOL program that prints "Hello, World!" to the console.',
-        expectedOutput: 'Hello, World!',
-        isCorrect: false,
-        difficulty: 'Easy'
-      },
-      {
+    
+    {
+    id: 1,
+    text: 'Write a COBOL program that displays "Hello World"',
+    expectedOutput: 'Hello World',
+    isCorrect: false,
+    difficulty: 'Easy'
+  },
+    
+    {
     id: 2,
     text: 'Write a COBOL program that calculates the sum of two numbers: 25 and 30. It should print "The sum is <r>".',
     expectedOutput: 'The sum is 55',
@@ -568,6 +613,10 @@
 
 
 
+
+
+
+
   {
     id: 57,
     text: 'Write a COBOL program that reads 3 numbers (8, 3, 7) and prints the smallest and largest of the three. Print "The smallest number is <smallest> and the largest is <largest>".',
@@ -845,6 +894,10 @@
 
 
 
+
+
+
+
   {
     id: 96,
     text: 'Write a COBOL program that reads data from two sequential files: one file containing customer records (customer name, ID, and account balance) and another file containing transaction records (customer ID, transaction type, and amount). The program should match the customer IDs from both files, update the account balances based on the transactions, and write the updated records to a new sequential file. For each transaction, if the type is "D" (deposit), add the amount to the account balance; if the type is "W" (withdrawal), subtract the amount. Display the updated balances and write them to the new file.\n\nTest with Simulated Files: If your environment doesn’t support file handling, simulate both the customer and transaction files in working-storage arrays. \n\nUse the following data for testing: \nCustomer file: \n1. John Doe - 12345 - $500.00 \n2. Jane Smith - 23456 - $1000.00 \n3. Bob Johnson - 34567 - $250.00 \n\nTransaction file: \n1. 12345 - D - $200.00 \n2. 23456 - W - $300.00 \n3. 34567 - D - $100.00 \n4. 12345 - W - $50.00',
@@ -927,6 +980,10 @@
 
 
 
+
+
+
+
 Error Log:
 1. Bob Johnson - Negative salary in main file, resolved using backup file.
 2. Alice Williams - Missing ID in main file, resolved using backup file.
@@ -944,6 +1001,10 @@ Error Log:
 3. Product C - 10003 - Stock: 75
 4. Product D - 10004 - Stock: 200
 5. Product E - 10005 - Stock: 150
+
+
+
+
 
 
 
@@ -968,6 +1029,10 @@ Error Log:
 
 
 
+
+
+
+
 Error Log:
 1. 1003 - Invalid amount in main file, resolved using backup file.
 2. 1004 - Missing account number in main file, resolved using backup file.
@@ -975,6 +1040,8 @@ Error Log:
   isCorrect: false,
   difficulty: 'Hard'
 }
+
+
 
 
     ];
@@ -1076,27 +1143,29 @@ Error Log:
       const totalChallenges = challenges.length;
       const correctChallenges = challenges.filter(challenge => isQuestionCorrect(challenge.id)).length;
       const percentageCorrect = ((correctChallenges / totalChallenges) * 100).toFixed(2);
-      const totalEasy = challenges.filter(challenge => challenge.difficulty === 'easy' && isQuestionCorrect(challenge.id)).length;
-      const totalMedium = challenges.filter(challenge => challenge.difficulty === 'medium' && isQuestionCorrect(challenge.id)).length;
-      const totalHard = challenges.filter(challenge => challenge.difficulty === 'hard' && isQuestionCorrect(challenge.id)).length;
+      const totalEasy = challenges.filter(challenge => challenge.difficulty === 'Easy').length;
+      const totalMedium = challenges.filter(challenge => challenge.difficulty === 'Medium').length;
+      const totalHard = challenges.filter(challenge => challenge.difficulty === 'Hard').length;
+      const correctEasy = challenges.filter(challenge => challenge.difficulty === 'Easy' && isQuestionCorrect(challenge.id)).length;
+      const correctMedium = challenges.filter(challenge => challenge.difficulty === 'Medium' && isQuestionCorrect(challenge.id)).length;
+      const correctHard = challenges.filter(challenge => challenge.difficulty === 'Hard' && isQuestionCorrect(challenge.id)).length;
 
       return {
         total: totalChallenges,
         correct: correctChallenges,
         percentage: percentageCorrect,
-        Easy: totalEasy,
-        Medium: totalMedium,
-        Hard: totalHard
+        Easy: { total: totalEasy, correct: correctEasy },
+        Medium: { total: totalMedium, correct: correctMedium },
+        Hard: { total: totalHard, correct: correctHard }
       };
     }
 
     function updateStatsUI() {
       const stats = calculateStats(challenges);
-      document.getElementById('total-correct').innerText = `Total Correct: ${stats.correct} out of ${stats.total} (${stats.percentage}%)`;
-      
-      //document.getElementById('total-easy').innerText = `Easy Challenges: ${stats.Easy}`;
-      //document.getElementById('total-medium').innerText = `Medium Challenges: ${stats.Medium}`;
-      //document.getElementById('total-hard').innerText = `Hard Challenges: ${stats.Hard}`;
+      document.getElementById('total-correct').innerText = `Total Correct: ${stats.correct} out of ${stats.total}`;
+      document.getElementById('total-easy').innerText = `Easy: ${stats.Easy.correct} out of ${stats.Easy.total}`;
+      document.getElementById('total-medium').innerText = `Medium: ${stats.Medium.correct} out of ${stats.Medium.total}`;
+      document.getElementById('total-hard').innerText = `Hard: ${stats.Hard.correct} out of ${stats.Hard.total}`;
     }
 
     // Check authentication state and initialize the page
@@ -1113,6 +1182,24 @@ Error Log:
         window.location.href = 'index.html';
       }
     });
+
+    // Feedback Modal Functions
+    const modal = document.getElementById("feedbackModal");
+    const span = document.getElementsByClassName("close")[0];
+
+    function openFeedbackModal() {
+      modal.style.display = "block";
+    }
+
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
   </script>
 </body>
 </html>

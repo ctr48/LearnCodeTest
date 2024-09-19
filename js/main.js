@@ -89,6 +89,31 @@ function redirectToStripePage() {
   }
 }
 
+// New function to submit feedback
+function submitFeedback(feedbackText) {
+  const user = firebase.auth().currentUser;
+  if (user) {
+    const db = firebase.firestore();
+    db.collection("feedback").add({
+      userId: user.uid,
+      userEmail: user.email,
+      feedback: feedbackText,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    })
+    .then((docRef) => {
+      console.log("Feedback submitted with ID: ", docRef.id);
+      alert("Thank you for your feedback!");
+    })
+    .catch((error) => {
+      console.error("Error submitting feedback: ", error);
+      alert("There was an error submitting your feedback. Please try again.");
+    });
+  } else {
+    console.error('User not logged in');
+    alert('Please log in to submit feedback.');
+  }
+}
+
 // Check login state on page load
 document.addEventListener('DOMContentLoaded', function() {
   firebase.auth().onAuthStateChanged(function(user) {
@@ -174,3 +199,4 @@ window.markAsCorrectFunction = markAsCorrectFunction;
 window.isQuestionCorrect = isQuestionCorrect;
 window.updateChallengeUI = updateChallengeUI;
 window.redirectToStripePage = redirectToStripePage;
+window.submitFeedback = submitFeedback;
