@@ -110,6 +110,8 @@ body {
   padding: 4px 8px;
   border-radius: 12px;
   margin-left: 10px;
+  display: inline-block; /* Ensure the badges are inline */
+  vertical-align: middle; /* Align the badges vertically in the middle */
 }
 
 .difficulty.easy {

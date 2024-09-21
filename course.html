@@ -10,6 +10,44 @@
   
   <link href="css/nav.css" rel="stylesheet">
   <link href="css/course.css" rel="stylesheet">
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    .problem-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    .problem-title {
+      flex-grow: 1;
+      margin-right: 10px;
+    }
+    .difficulty {
+      margin-right: 10px;
+      padding: 5px 10px;
+      border-radius: 3px;
+      font-size: 0.8em;
+    }
+    .difficulty.easy { background-color: #d4edda; color: #155724; }
+    .difficulty.medium { background-color: #fff3cd; color: #856404; }
+    .difficulty.hard { background-color: #f8d7da; color: #721c24; }
+    .solution-button {
+      padding: 5px 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    .solution-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
   <nav>
@@ -44,8 +82,8 @@
         <div class="problem-item">
           <h3 id="challengeTitle" class="problem-title"></h3>
           <p id="challengeText"></p>
-          <button class="solution-button" onclick="showExpectedOutput()">Solution</button>
           <span id="challengeDifficulty" class="difficulty"></span>
+          <button class="solution-button" onclick="showExpectedOutput()">Solution</button>
         </div>
         <div id="expectedOutput" class="hidden"></div>
       </div>
@@ -64,7 +102,9 @@
       <div id="answerResult"></div>
 
       <h2>All Challenges</h2>
-      <ul id="challengeList" class="problem-list"></ul>
+      <ul id="challengeList" class="problem-list">
+        <!-- Challenge list will be populated by JavaScript -->
+      </ul>
     </div>
   </div>
 
@@ -92,18 +132,22 @@
    
     // Load challenges
     const challenges = [
-    {
-    id: 2,
-    title: 'Basic Sum',
-    text: 'Write a COBOL program that calculates the sum of two numbers: 25 and 30. It should print "The sum is <r>".',
-    expectedOutput: 'The sum is 55',
-    isCorrect: false,
-    difficulty: 'Easy'
-  },
-
-
-
-
+      {
+        id: 1,
+        title: 'Hello World',
+        text: "Write a COBOL program that displays 'Hello World'.",
+        expectedOutput: 'Hello World',
+        isCorrect: false,
+        difficulty: 'Easy'
+      },
+      {
+        id: 2,
+        title: 'Basic Sum',
+        text: 'Write a COBOL program that calculates the sum of two numbers: 25 and 30. It should print "The sum is <r>".',
+        expectedOutput: 'The sum is 55',
+        isCorrect: false,
+        difficulty: 'Easy'
+      }
     ];
 
     let currentChallengeIndex = 0;
@@ -114,16 +158,23 @@
 
     function displayChallenge() {
       const challenge = getCurrentChallenge();
-      challengeTitleElement.textContent = challenge.title;
-      challengeTextElement.textContent = challenge.text;
-      challengeDifficultyElement.textContent = challenge.difficulty;
-      challengeDifficultyElement.className = `difficulty ${challenge.difficulty.toLowerCase()}`;
-      markAsCorrectButtonElement.setAttribute('data-question-id', challenge.id);
-      
-      updateChallengeUI(challenge);
-      
-      expectedOutputElement.textContent = '';
-      expectedOutputElement.classList.add('hidden');
+      if (challenge) {
+        challengeTitleElement.textContent = challenge.title;
+        challengeTextElement.textContent = challenge.text;
+        challengeDifficultyElement.textContent = challenge.difficulty;
+        challengeDifficultyElement.className = `difficulty ${challenge.difficulty.toLowerCase()}`;
+        markAsCorrectButtonElement.setAttribute('data-question-id', challenge.id);
+        
+        updateChallengeUI(challenge);
+        
+        expectedOutputElement.textContent = '';
+        expectedOutputElement.classList.add('hidden');
+      } else {
+        challengeTitleElement.textContent = 'No challenges available';
+        challengeTextElement.textContent = '';
+        challengeDifficultyElement.textContent = '';
+        markAsCorrectButtonElement.setAttribute('data-question-id', '');
+      }
     }
 
     function nextChallenge() {
@@ -155,17 +206,21 @@
 
     function showExpectedOutput() {
       const challenge = getCurrentChallenge();
-      expectedOutputElement.textContent = 'Expected Output: ' + challenge.expectedOutput;
-      expectedOutputElement.classList.remove('hidden');
+      if (challenge) {
+        expectedOutputElement.textContent = 'Expected Output: ' + challenge.expectedOutput;
+        expectedOutputElement.classList.remove('hidden');
+      }
     }
 
     function markAsCorrect() {
       alert("Warning: Dishonest answers and users may be removed. Ensure you're solving the challenges honestly.");
       const currentChallenge = getCurrentChallenge();
-      markAsCorrectFunction(currentChallenge.id);
-      updateChallengeUI(currentChallenge);
-      updateChallengeListColors();
-      updateStatsUI();
+      if (currentChallenge) {
+        markAsCorrectFunction(currentChallenge.id);
+        updateChallengeUI(currentChallenge);
+        updateChallengeListColors();
+        updateStatsUI();
+      }
     }
 
     function updateChallengeListColors() {
@@ -190,20 +245,30 @@
     }, false);
 
     // Populate the challenge list
-    challenges.forEach((challenge, index) => {
-      const listItem = document.createElement('li');
-      listItem.className = 'problem-item';
-      listItem.innerHTML = `
-        <span class="problem-title">Challenge ${index + 1}: ${challenge.title}</span>
-        <span class="difficulty ${challenge.difficulty.toLowerCase()}">${challenge.difficulty}</span>
-        <button class="solution-button" onclick="showSolution(${index})">Solution</button>
-      `;
-      listItem.addEventListener('click', () => {
-        currentChallengeIndex = index;
-        displayChallenge();
+    function populateChallengeList() {
+      challengeListElement.innerHTML = ''; // Clear existing list
+      challenges.forEach((challenge, index) => {
+        const listItem = document.createElement('li');
+        listItem.className = 'problem-item';
+        listItem.innerHTML = `
+          <span class="problem-title">Challenge ${challenge.id}: ${challenge.title}</span>
+          <div>
+            <span class="difficulty ${challenge.difficulty.toLowerCase()}">${challenge.difficulty}</span>
+            <button class="solution-button" onclick="showSolution(${index})">Solution</button>
+          </div>
+        `;
+        listItem.addEventListener('click', () => {
+          currentChallengeIndex = index;
+          displayChallenge();
+          // Scroll to the top of the page
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
+        });
+        challengeListElement.appendChild(listItem);
       });
-      challengeListElement.appendChild(listItem);
-    });
+    }
 
     function showSolution(index) {
       const challenge = challenges[index];
@@ -264,6 +329,7 @@
         document.getElementById('courseContent').style.display = 'block';
         document.getElementById('userName').textContent = user.displayName;
 
+        populateChallengeList();
         updateChallengeListColors();
         displayChallenge();
         updateStatsUI();
