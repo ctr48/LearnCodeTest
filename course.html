@@ -14,6 +14,20 @@
     html {
       scroll-behavior: smooth;
     }
+    .container {
+      display: flex;
+      flex-direction: row;
+      height: calc(100vh - 50px); /* Adjust based on your nav height */
+      overflow: hidden;
+    }
+    .left-section, .right-section {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+    .left-section {
+      border-right: 1px solid #ddd;
+    }
     .problem-item {
       display: flex;
       justify-content: space-between;
@@ -47,6 +61,47 @@
     .solution-button:hover {
       background-color: #0056b3;
     }
+    .challenge-checkbox {
+      margin-right: 10px;
+    }
+    .challenge-checkbox input[type="checkbox"] {
+      cursor: pointer;
+    }
+    #userInfo {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+    .rank-display {
+      background-color: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 20px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .rank-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .rank-title {
+      font-size: 1.2em;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .rank-name {
+      font-size: 1.5em;
+      color: #007bff;
+    }
+    .rank-emblem {
+      width: 80px;
+      height: 80px;
+      margin-right: 20px;
+    }
   </style>
 </head>
 <body>
@@ -58,53 +113,64 @@
     </ul>
   </nav>
 
-  <div class="container">
-    <div id="userInfo" style="display: none;">
-      <span id="userName"></span>
-      <button id="logoutBtn" onclick="logout()">Logout</button>
-      <button id="manageAccountBtn" onclick="manageAccount()">Manage Account</button>
-    </div>
+  <div id="userInfo" style="display: none;">
+    <span id="userName"></span>
+    <button id="logoutBtn" onclick="logout()">Logout</button>
+    <button id="manageAccountBtn" onclick="manageAccount()">Manage Account</button>
+  </div>
 
-    <div id="courseContent" style="display: none;">
-      <h1>COBOL Practice Problems</h1>
+  <div id="courseContent" style="display: none;">
+    <div class="container">
+      <div class="left-section">
+        <h1>100 Days of Cobol</h1>
 
-      <div class="stats">
-        <p id="total-correct"></p>
-        <p id="total-easy"></p>
-        <p id="total-medium"></p>
-        <p id="total-hard"></p>
-      </div>
-
-      <div class="current-problem">
-        <h2>Current Problem</h2>
-
-        <h2 id="challengeTitle" class="problem-title"></h2>
-        <div class="problem-item">
-          <h3 id="challengeTitle" class="problem-title"></h3>
-          <p id="challengeText"></p>
-          <span id="challengeDifficulty" class="difficulty"></span>
-          <button class="solution-button" onclick="showExpectedOutput()">Solution</button>
+        <div class="rank-display">
+          <img id="rankEmblem" class="rank-emblem" src="" alt="Rank Emblem">
+          <div class="rank-info">
+            <div class="rank-title">Your Rank:</div>
+            <div id="userRank" class="rank-name"></div>
+          </div>
         </div>
-        <div id="expectedOutput" class="hidden"></div>
+
+        <div class="stats">
+          <p id="total-correct"></p>
+          <p id="total-easy"></p>
+          <p id="total-medium"></p>
+          <p id="total-hard"></p>
+        </div>
+
+        <div class="current-problem">
+          <h2>Current Problem</h2>
+
+          <div class="problem-item">
+            <h3 id="challengeTitle" class="problem-title"></h3>
+            <p id="challengeText"></p>
+            <span id="challengeDifficulty" class="difficulty"></span>
+            <button class="solution-button" onclick="showExpectedOutput()">Solution</button>
+          </div>
+          <div id="expectedOutput" class="hidden"></div>
+        </div>
+
+        <div id="controls">
+          <button id="prevButton" onclick="prevChallenge()">&lt; Previous</button>
+          <button id="nextButton" onclick="nextChallenge()">Next &gt;</button>
+          <button id="markAsCorrectButton" onclick="markAsCorrect()">Mark as Correct</button>
+          <button id="feedbackButton" onclick="openFeedbackModal()">Give Feedback</button>
+          <button id="stripeButton" onclick="buyMeCoffee()">Buy me a coffee</button>
+        </div>
+
+        <h2>All Challenges</h2>
+        <ul id="challengeList" class="problem-list">
+          <!-- Challenge list will be populated by JavaScript -->
+        </ul>
       </div>
 
-      <div id="controls">
-        <button id="prevButton" onclick="prevChallenge()">&lt; Previous</button>
-        <button id="nextButton" onclick="nextChallenge()">Next &gt;</button>
-        <button id="markAsCorrectButton" onclick="markAsCorrect()">Mark as Correct</button>
-        <button id="feedbackButton" onclick="openFeedbackModal()">Give Feedback</button>
-        <button id="stripeButton" onclick="buyMeCoffee()">Buy me a coffee</button>
+      <div class="right-section">
+        <h1>COBOL Compiler</h1>
+        <div data-pym-src="https://www.jdoodle.com/embed/v1/86d1c02375800a77"></div>
+        <div id="outputResult"></div>
+        <div id="answerResult"></div>
       </div>
-
-      <div data-pym-src="https://www.jdoodle.com/embed/v1/86d1c02375800a77"></div>
-      <script src="https://www.jdoodle.com/assets/jdoodle-pym.min.js" type="text/javascript"></script>
-      <div id="outputResult"></div>
-      <div id="answerResult"></div>
-
-      <h2>All Challenges</h2>
-      <ul id="challengeList" class="problem-list">
-        <!-- Challenge list will be populated by JavaScript -->
-      </ul>
     </div>
   </div>
 
@@ -116,6 +182,7 @@
     </div>
   </div>
  
+  <script src="https://www.jdoodle.com/assets/jdoodle-pym.min.js" type="text/javascript"></script>
   <script src="js/main.js"></script>
   <script>
     const challengeTitleElement = document.getElementById('challengeTitle');
@@ -129,25 +196,820 @@
     const markAsCorrectButtonElement = document.getElementById('markAsCorrectButton');
     const expectedOutputElement = document.getElementById('expectedOutput');
     const challengeListElement = document.getElementById('challengeList');
+    const userRankElement = document.getElementById('userRank');
+    const rankEmblemElement = document.getElementById('rankEmblem');
    
     // Load challenges
     const challenges = [
-      {
-        id: 1,
-        title: 'Hello World',
-        text: "Write a COBOL program that displays 'Hello World'.",
-        expectedOutput: 'Hello World',
-        isCorrect: false,
-        difficulty: 'Easy'
-      },
-      {
-        id: 2,
-        title: 'Basic Sum',
-        text: 'Write a COBOL program that calculates the sum of two numbers: 25 and 30. It should print "The sum is <r>".',
-        expectedOutput: 'The sum is 55',
-        isCorrect: false,
-        difficulty: 'Easy'
-      }
+   
+    {
+    id: 1,
+    title: 'Hello World',
+    text: "Write a COBOL program that displays 'Hello World'.",
+    expectedOutput: 'Hello World',
+    isCorrect: false,
+    difficulty: 'Easy'
+  },
+    {
+    id: 2,
+    title: 'Basic Sum',
+    text: 'Write a COBOL program that calculates the sum of two numbers: 25 and 30. It should print "The sum is <r>".',
+    expectedOutput: 'The sum is 55',
+    isCorrect: false,
+    difficulty: 'Easy'
+  },
+{
+  id: 3,
+  title: 'Basic Multiplication',
+  text: 'Write a COBOL program that multiplies two numbers: 12 and 5. It should print "The product is <r>".',
+  expectedOutput: 'The product is 60',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 4,
+  title: 'User Input Sum',
+  text: 'Write a COBOL program that reads two numbers from the user, adds them together, and prints the result as "The total is <result>". Assume the input numbers are 10 and 20.',
+  expectedOutput: 'The total is 30',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 5,
+  title: 'Fahrenheit to Celsius',
+  text: 'Write a COBOL program that converts Fahrenheit to Celsius using the formula (F - 32) * 5 / 9 and prints "Temperature in Celsius: <result>". Assume the Fahrenheit input is 100.',
+  expectedOutput: 'Temperature in Celsius: 37.78',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 6,
+  title: 'Even or Odd',
+  text: 'Write a COBOL program that checks if a number is even or odd. Print "The number is even" if the number is even, or "The number is odd" if the number is odd. Assume the input is 7.',
+  expectedOutput: 'The number is odd',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 7,
+  title: 'Average of Three Numbers',
+  text: 'Write a COBOL program that calculates the average of three numbers: 20, 40, and 60. It should print "The average is <result>".',
+  expectedOutput: 'The average is 40',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 8,
+  title: 'First 5 Multiples',
+  text: 'Write a COBOL program that prints the first 5 multiples of a number (3) using a loop. It should print each multiple on a new line.',
+  expectedOutput: '3\n6\n9\n12\n15',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 9,
+  title: 'Square Calculation',
+  text: 'Write a COBOL program that calculates the square of a number (7) and prints "The square of 7 is <result>".',
+  expectedOutput: 'The square of 7 is 49',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 10,
+  title: 'Sum of List',
+  text: 'Write a COBOL program that reads a list of 5 numbers (10, 20, 30, 40, 50) from the user, calculates their total sum, and prints "The total sum is <result>".',
+  expectedOutput: 'The total sum is 150',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 11,
+  title: 'Average of List',
+  text: 'Write a COBOL program that reads a list of 4 numbers (5, 10, 15, 20), calculates their average, and prints "The average is <result>".',
+  expectedOutput: 'The average is 12.5',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 12,
+  title: 'Prime Check',
+  text: 'Write a COBOL program that asks the user for a number and prints whether it is a prime number or not. Assume the input is 7.',
+  expectedOutput: 'The number is prime',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 13,
+  title: 'Sum of Digits',
+  text: 'Write a COBOL program that reads a number (12345) and prints the sum of its digits. The program should output "The sum of the digits is <result>".',
+  expectedOutput: 'The sum of the digits is 15',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 14,
+  title: 'Circle Area Calculation',
+  text: 'Write a COBOL program that reads the radius of a circle (7) and calculates its area using the formula Area = π * r^2. Print "The area of the circle is <result>". (Use 3.1416 for π)',
+  expectedOutput: 'The area of the circle is 153.9384',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 15,
+  title: 'Reverse a Number',
+  text: 'Write a COBOL program that reads a number (54321) and prints the reverse of the number as "The reverse of 54321 is 12345".',
+  expectedOutput: 'The reverse of 54321 is 12345',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 16,
+  title: 'Leap Year Check',
+  text: 'Write a COBOL program that reads a year (2024) and checks if it is a leap year or not. Print "2024 is a leap year" if it is, or "2024 is not a leap year" if it is not.',
+  expectedOutput: '2024 is a leap year',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 17,
+  title: 'GCD Calculation',
+  text: 'Write a COBOL program that reads two numbers (15 and 25) and finds their greatest common divisor (GCD). Print "The GCD of 15 and 25 is <result>".',
+  expectedOutput: 'The GCD of 15 and 25 is 5',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 18,
+  title: 'Triangle Validity Check',
+  text: 'Write a COBOL program that reads 3 sides of a triangle (3, 4, 5) and checks if it forms a valid triangle. Print "This forms a valid triangle" if it does, otherwise print "This does not form a valid triangle".',
+  expectedOutput: 'This forms a valid triangle',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 19,
+  title: 'Reverse a String',
+  text: 'Write a COBOL program that reads a 5-character string ("HELLO") and prints it in reverse as "The reverse of HELLO is OLLEH".',
+  expectedOutput: 'The reverse of HELLO is OLLEH',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 20,
+  title: 'Square a List',
+  text: 'Write a COBOL program that reads a list of 5 integers (1, 2, 3, 4, 5), squares each number, and prints the result as "The squares are: <result>".',
+  expectedOutput: 'The squares are: 1 4 9 16 25',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 21,
+  title: 'Sort a List',
+  text: 'Write a COBOL program that reads a list of 4 numbers (8, 3, 6, 1) and sorts them in ascending order. Print "The sorted numbers are: <result>".',
+  expectedOutput: 'The sorted numbers are: 1 3 6 8',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 22,
+  title: 'Vowel Count',
+  text: 'Write a COBOL program that reads a string ("programming") and counts the number of vowels in the string. Print "The number of vowels in the string is <result>".',
+  expectedOutput: 'The number of vowels in the string is 3',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 23,
+  title: 'LCM Calculation',
+  text: 'Write a COBOL program that reads two numbers (18 and 12) and finds their least common multiple (LCM). Print "The LCM of 18 and 12 is <result>".',
+  expectedOutput: 'The LCM of 18 and 12 is 36',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 24,
+  title: 'Even Numbers in List',
+  text: 'Write a COBOL program that reads a list of 6 numbers (1, 2, 3, 4, 5, 6) and prints the even numbers from the list as "The even numbers are: <result>".',
+  expectedOutput: 'The even numbers are: 2 4 6',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 25,
+  title: 'Square Root Calculation',
+  text: 'Write a COBOL program that reads a number (144) and calculates its square root. Print "The square root of 144 is <result>".',
+  expectedOutput: 'The square root of 144 is 12',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 26,
+  title: 'Divisibility Check',
+  text: 'Write a COBOL program that reads two numbers (48 and 60) and checks if the second number is a divisor of the first. Print "60 is a divisor of 48" or "60 is not a divisor of 48".',
+  expectedOutput: '60 is not a divisor of 48',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 27,
+  title: 'Multiplication Table',
+  text: 'Write a COBOL program that reads an integer (5) and prints the multiplication table up to 5 as "Multiplication table of 5: <result>".',
+  expectedOutput: 'Multiplication table of 5: 5 10 15 20 25',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 28,
+  title: 'Word Count',
+  text: 'Write a COBOL program that reads a sentence ("I love COBOL programming") and counts the number of words. Print "The number of words in the sentence is <result>".',
+  expectedOutput: 'The number of words in the sentence is 4',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 29,
+  title: 'Product of List',
+  text: 'Write a COBOL program that reads a list of 4 integers (2, 4, 6, 8) and calculates the product of all the numbers. Print "The product of the numbers is <result>".',
+  expectedOutput: 'The product of the numbers is 384',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 30,
+  title: 'Maximum Number in List',
+  text: 'Write a COBOL program that reads a list of 5 integers (5, 10, 15, 20, 25) and finds the maximum number in the list. Print "The maximum number is <result>".',
+  expectedOutput: 'The maximum number is 25',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 31,
+  title: 'Days Between Dates',
+  text: 'Write a COBOL program that reads two dates (e.g., 12-25-2024 and 01-01-2025) and calculates the number of days between them. Print "The number of days between the two dates is <result>".',
+  expectedOutput: 'The number of days between the two dates is 7',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 32,
+  title: 'Cumulative Sum',
+  text: 'Write a COBOL program that reads a list of 6 numbers (2, 4, 6, 8, 10, 12) and calculates their cumulative sum. Print "The cumulative sum is <result>".',
+  expectedOutput: 'The cumulative sum is 42',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 33,
+  title: 'Convert to Uppercase',
+  text: 'Write a COBOL program that reads a string ("hello world") and converts it to uppercase. Print "The uppercase string is <result>".',
+  expectedOutput: 'The uppercase string is HELLO WORLD',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 34,
+  title: 'Palindrome Check',
+  text: 'Write a COBOL program that checks if a given number (121) is a palindrome. Print "The number 121 is a palindrome" or "The number 121 is not a palindrome".',
+  expectedOutput: 'The number 121 is a palindrome',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 35,
+  title: 'Simple Interest Calculation',
+  text: 'Write a COBOL program that calculates the total interest earned on a principal of $1000 at a rate of 5% over 2 years using simple interest. Print "The total interest is <result>".',
+  expectedOutput: 'The total interest is 100',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 36,
+  title: 'Sum Divisibility Check',
+  text: 'Write a COBOL program that reads a list of 5 integers (5, 7, 9, 11, 13) and calculates their sum. Then check if the sum is divisible by 2 or not. Print "<result> is divisible by 2" or "<result> is not divisible by 2".',
+  expectedOutput: '45 is not divisible by 2',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+
+
+
+
+{
+  id: 37,
+  title: 'Odd Numbers in List',
+  text: 'Write a COBOL program that reads a list of 5 integers (1, 2, 3, 4, 5) and prints only the odd numbers as "The odd numbers are: <result>".',
+  expectedOutput: 'The odd numbers are: 1 3 5',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 38,
+  title: 'Reverse Name Order',
+  text: 'Write a COBOL program that reads the first and last name of a person ("John Doe") and prints them in reverse order as "Doe John".',
+  expectedOutput: 'Doe John',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 39,
+  title: 'Sum of Numbers',
+  text: 'Write a COBOL program that reads a positive integer (5) and prints the sum of all numbers from 1 to that number. Print "The sum of numbers from 1 to 5 is <result>".',
+  expectedOutput: 'The sum of numbers from 1 to 5 is 15',
+  isCorrect: false,
+  difficulty: 'Easy'
+},
+{
+  id: 40,
+  title: 'Sum of Squares',
+  text: 'Write a COBOL program that reads a list of 5 integers (1, 2, 3, 4, 5), squares each number, sums the squares, and prints "The sum of squares is <result>".',
+  expectedOutput: 'The sum of squares is 55',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 41,
+  title: 'Count Letter Occurrences',
+  text: 'Write a COBOL program that reads a string ("hello world") and counts how many times the letter "l" appears in the string. Print "The letter l appears <result> times".',
+  expectedOutput: 'The letter l appears 3 times',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 42,
+  title: 'Sort Numbers in Descending Order',
+  text: 'Write a COBOL program that reads a list of 4 integers (12, 7, 5, 10) and sorts them in descending order. Print "The sorted numbers in descending order are: <result>".',
+  expectedOutput: 'The sorted numbers in descending order are: 12 10 7 5',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 43,
+  title: 'Factorial Calculation',
+  text: 'Write a COBOL program that calculates the factorial of a given number (5) using a loop. Print "The factorial of 5 is <result>".',
+  expectedOutput: 'The factorial of 5 is 120',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 44,
+  title: 'Median of Numbers',
+  text: 'Write a COBOL program that reads a list of 5 numbers (10, 20, 30, 40, 50) and finds the median. Print "The median is <result>".',
+  expectedOutput: 'The median is 30',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 45,
+  title: 'String Concatenation',
+  text: 'Write a COBOL program that reads two strings ("apple" and "banana") and concatenates them with a space in between. Print "The concatenated string is <result>".',
+  expectedOutput: 'The concatenated string is apple banana',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 46,
+  title: 'Count Words in a String',
+  text: 'Write a COBOL program that reads a string ("the quick brown fox") and counts the number of words in the string. Print "The number of words is <result>".',
+  expectedOutput: 'The number of words is 4',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 47,
+  title: 'Read and Display Customer Data',
+  text: 'Write a COBOL program that reads customer data from a sequential file. The file contains records with the customer’s name (20 characters) and the amount they have spent (a 5-digit number with 2 decimal places). Your program should read each record, display the customer’s name and amount spent, then print the total number of customers and the total amount spent by all customers. \n\nTest with a Simulated File: If your environment doesn’t support actual file handling, simulate the file’s content by storing it in a working-storage section array, then perform the sequential reading operations on this array. \n\nUse the following customer data for testing: \n1. John Doe - $120.50 \n2. Jane Smith - $250.75 \n3. Bob Johnson - $98.00 \n4. Alice Williams - $170.25',
+  expectedOutput: `Customer: John Doe           Amount: 120.50\nCustomer: Jane Smith         Amount: 250.75\nCustomer: Bob Johnson        Amount: 98.00\nCustomer: Alice Williams     Amount: 170.25\nTotal number of customers: 4\nTotal amount: 639.50`,
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 48,
+  title: 'Sum and Average of List',
+  text: 'Write a COBOL program that reads a list of 6 numbers (10, 20, 30, 40, 50, 60), and calculates both the sum and average of the numbers. Print "The sum is <sum> and the average is <average>".',
+  expectedOutput: 'The sum is 210 and the average is 35',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 49,
+  title: 'String Capitalization',
+  text: 'Write a COBOL program that reads a string ("Programming") and prints the string with the first letter capitalized and the rest lowercase. Print "The formatted string is <result>".',
+  expectedOutput: 'The formatted string is Programming',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 50,
+  title: 'Check Even Digits',
+  text: 'Write a COBOL program that reads an integer (2468) and checks if all digits are even. Print "<number> contains only even digits" or "<number> contains odd digits".',
+  expectedOutput: '2468 contains only even digits',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 51,
+  title: 'Days Between Dates',
+  text: 'Write a COBOL program that reads two dates (e.g., 12-01-2024 and 12-31-2024) and calculates the number of days between them. Print "The number of days between the two dates is <result>".',
+  expectedOutput: 'The number of days between the two dates is 30',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 52,
+  title: 'Capitalize Each Word',
+  text: 'Write a COBOL program that reads a string ("cobol programming") and capitalizes the first letter of each word. Print "The capitalized string is <result>".',
+  expectedOutput: 'The capitalized string is Cobol Programming',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 53,
+  title: 'Calculate Square Roots',
+  text: 'Write a COBOL program that reads a list of 4 numbers (4, 16, 36, 64) and calculates the square root of each number. Print "The square roots are: <result>".',
+  expectedOutput: 'The square roots are: 2 4 6 8',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 54,
+  title: 'Count Character Occurrences',
+  text: 'Write a COBOL program that reads a string ("ABABCC") and prints the number of occurrences of each character. Print "A: 2, B: 2, C: 2".',
+  expectedOutput: 'A: 2, B: 2, C: 2',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 55,
+  title: 'Numbers Divisible by 3',
+  text: 'Write a COBOL program that reads a list of 5 numbers (2, 4, 6, 8, 10) and prints only the numbers that are divisible by 3. Print "The numbers divisible by 3 are: <result>".',
+  expectedOutput: 'The numbers divisible by 3 are: 6',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 56,
+  title: 'Palindrome Check for String',
+  text: 'Write a COBOL program that reads a string ("deified") and checks if it is a palindrome. Print "<word> is a palindrome" or "<word> is not a palindrome".',
+  expectedOutput: 'deified is a palindrome',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 57,
+  title: 'Find Smallest and Largest Number',
+  text: 'Write a COBOL program that reads 3 numbers (8, 3, 7) and prints the smallest and largest of the three. Print "The smallest number is <smallest> and the largest is <largest>".',
+  expectedOutput: 'The smallest number is 3 and the largest is 8',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 58,
+  title: 'Second Largest in List',
+  text: 'Write a COBOL program that reads a list of 6 numbers (5, 3, 8, 2, 1, 9), finds the second largest number, and prints "The second largest number is <result>".',
+  expectedOutput: 'The second largest number is 8',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 59,
+  title: 'Cumulative Product of List',
+  text: 'Write a COBOL program that reads a list of 4 numbers (1, 2, 4, 8) and calculates the cumulative product of the numbers. Print "The cumulative product is <result>".',
+  expectedOutput: 'The cumulative product is 64',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 60,
+  title: 'Shift Characters in String',
+  text: 'Write a COBOL program that reads a 6-character string ("abcdef") and shifts each character by 1 position to the right, wrapping the last character to the first position. Print "The shifted string is <result>".',
+  expectedOutput: 'The shifted string is fabcde',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 61,
+  title: 'Find Max and Min in List',
+  text: 'Write a COBOL program that reads a list of 10 integers (15, 23, 9, 67, 45, 89, 42, 13, 8, 19), and finds both the maximum and minimum numbers. Print "The maximum is <max> and the minimum is <min>".',
+  expectedOutput: 'The maximum is 89 and the minimum is 8',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 62,
+  title: 'Pangram Check',
+  text: 'Write a COBOL program that reads a sentence ("The quick brown fox jumps over the lazy dog") and checks if it contains all the letters of the alphabet (a pangram). Print "The sentence is a pangram" or "The sentence is not a pangram".',
+  expectedOutput: 'The sentence is a pangram',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 63,
+  title: 'Find Least Common Multiple',
+  text: 'Write a COBOL program that reads 3 integers (12, 15, 20) and finds the least common multiple (LCM) of the three numbers. Print "The LCM is <result>".',
+  expectedOutput: 'The LCM is 60',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 64,
+  title: 'Sort and Find Median',
+  text: 'Write a COBOL program that reads a list of 5 integers (8, 5, 12, 7, 6), sorts the list in ascending order, and prints both the sorted list and the median. Print "The sorted list is <sorted> and the median is <median>".',
+  expectedOutput: 'The sorted list is 5 6 7 8 12 and the median is 7',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 65,
+  title: 'Second Largest Number',
+  text: 'Write a COBOL program that reads a list of 7 integers (2, 4, 7, 3, 9, 12, 8) and finds the second largest number. Print "The second largest number is <result>".',
+  expectedOutput: 'The second largest number is 9',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 66,
+  title: 'Fibonacci Series',
+  text: 'Write a COBOL program that reads a number (8) and prints the Fibonacci series up to that number. Print "The Fibonacci series up to 8 is <result>".',
+  expectedOutput: 'The Fibonacci series up to 8 is 0 1 1 2 3 5 8',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 67,
+  title: 'Palindrome Check for String',
+  text: 'Write a COBOL program that reads a 7-character string ("racecar") and checks if it is a palindrome by comparing each character. Print "The string is a palindrome" or "The string is not a palindrome".',
+  expectedOutput: 'The string is a palindrome',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 68,
+  title: 'Greatest Common Divisor',
+  text: 'Write a COBOL program that reads two numbers (6, 9) and prints their greatest common divisor (GCD). Print "The GCD of 6 and 9 is <result>".',
+  expectedOutput: 'The GCD of 6 and 9 is 3',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 69,
+  title: 'Square Roots of List',
+  text: 'Write a COBOL program that reads a list of 5 numbers (4, 16, 36, 49, 64) and prints the square root of each number using a loop. Print "The square roots are: <result>".',
+  expectedOutput: 'The square roots are: 2 4 6 7 8',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 70,
+  title: 'Cumulative Product of List',
+  text: 'Write a COBOL program that reads a list of 4 numbers (25, 15, 30, 20), calculates the cumulative product of the numbers, and prints "The cumulative product is <result>".',
+  expectedOutput: 'The cumulative product is 225000',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 71,
+  title: 'Numbers Divisible by 2 and 5',
+  text: 'Write a COBOL program that reads a list of 10 integers (10, 20, 30, 40, 50, 60, 70, 80, 90, 100) and counts how many of the numbers are divisible by both 2 and 5. Print "The count of numbers divisible by 2 and 5 is <result>".',
+  expectedOutput: 'The count of numbers divisible by 2 and 5 is 10',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 72,
+  title: 'Most Frequent Character',
+  text: 'Write a COBOL program that reads a string ("ABRACADABRA") and prints the most frequently occurring character. Print "The most frequent character is <character>".',
+  expectedOutput: 'The most frequent character is A',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 73,
+  title: 'Average of Top 3 Numbers',
+  text: 'Write a COBOL program that reads a list of 6 integers (100, 80, 90, 70, 60, 50) and calculates the average of the top 3 numbers. Print "The average of the top 3 numbers is <result>".',
+  expectedOutput: 'The average of the top 3 numbers is 90',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 74,
+  title: 'Count Specific Character',
+  text: 'Write a COBOL program that reads a string ("mississippi") and counts how many times the letter "s" appears in the string. Print "The letter s appears <result> times".',
+  expectedOutput: 'The letter s appears 4 times',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 75,
+  title: 'Check Powers of 2',
+  text: 'Write a COBOL program that reads a list of 8 integers (2, 4, 8, 16, 32, 64, 128, 256) and checks if all the numbers are powers of 2. Print "All numbers are powers of 2" or "Not all numbers are powers of 2".',
+  expectedOutput: 'All numbers are powers of 2',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 76,
+  title: 'Sum of Even and Odd Numbers',
+  text: 'Write a COBOL program that reads a list of 5 integers (1, 2, 3, 4, 5) and calculates both the sum of the even numbers and the sum of the odd numbers. Print "The sum of even numbers is <result> and the sum of odd numbers is <result>".',
+  expectedOutput: 'The sum of even numbers is 6 and the sum of odd numbers is 9',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 77,
+  title: 'Check Occurrences of Character',
+  text: 'Write a COBOL program that reads a 9-character string ("ABABCBABC") and checks if the string contains exactly 3 occurrences of "A". Print "The string contains 3 occurrences of A" or "The string does not contain 3 occurrences of A".',
+  expectedOutput: 'The string contains 3 occurrences of A',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 78,
+  title: 'Check Arithmetic Progression',
+  text: 'Write a COBOL program that reads a list of 6 integers (2, 4, 6, 8, 10, 12) and checks if they form an arithmetic progression. Print "The numbers form an arithmetic progression" or "The numbers do not form an arithmetic progression".',
+  expectedOutput: 'The numbers form an arithmetic progression',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 79,
+  title: 'Check Divisibility by 3 and 7',
+  text: 'Write a COBOL program that reads a string ("42") and converts it to an integer. Then check if the integer is divisible by 3 and 7. Print "<result> is divisible by 3 and 7" or "<result> is not divisible by 3 and 7".',
+  expectedOutput: '42 is divisible by 3 and 7',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 80,
+  title: 'Square Root of Numbers',
+  text: 'Write a COBOL program that reads a list of 4 numbers (4, 16, 36, 64) and prints each number with its square root. Print "The square root of <number> is <result>".',
+  expectedOutput: 'The square root of 4 is 2\nThe square root of 16 is 4\nThe square root of 36 is 6\nThe square root of 64 is 8',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 81,
+  title: 'Palindrome Check for Word',
+  text: 'Write a COBOL program that reads a 5-letter word ("LEVEL") and checks if it is a palindrome. Print "<word> is a palindrome" or "<word> is not a palindrome".',
+  expectedOutput: 'LEVEL is a palindrome',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+
+{
+  id: 82,
+  title: 'Sum of Alternate Numbers',
+  text: 'Write a COBOL program that reads a list of 8 integers (3, 6, 9, 12, 15, 18, 21, 24) and prints the sum of every alternate number. Print "The sum of alternate numbers is <result>".',
+  expectedOutput: 'The sum of alternate numbers is 72',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 83,
+  title: 'Check Shared Digits Between Numbers',
+  text: 'Write a COBOL program that reads two 3-digit numbers (345 and 678) and checks if they share any digits. Print "<number1> and <number2> share the digits <result>" or "<number1> and <number2> do not share any digits".',
+  expectedOutput: '345 and 678 do not share any digits',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 84,
+  title: 'Check Geometric Progression',
+  text: 'Write a COBOL program that reads a list of 5 integers (3, 9, 27, 81, 243) and checks if the numbers form a geometric progression. Print "The numbers form a geometric progression" or "The numbers do not form a geometric progression".',
+  expectedOutput: 'The numbers form a geometric progression',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 85,
+  title: 'Student Record Management',
+  text: 'Write a COBOL program to manage a list of student records. Each record contains the student ID, name, and grades for 5 subjects. Calculate and display each student\'s average grade and determine whether they passed or failed (pass if average >= 60%).',
+  expectedOutput: 'Student ID: 001 Name: Alice Average Grade: 75% Pass\nStudent ID: 002 Name: Bob Average Grade: 58% Fail\nStudent ID: 003 Name: Charlie Average Grade: 82% Pass',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 86,
+  title: 'Stack Data Structure',
+  text: 'Write a COBOL program that implements a simple stack data structure. The program should allow pushing numbers onto the stack, popping numbers from the stack, and displaying the contents of the stack. Ensure proper handling of stack overflow and underflow conditions.',
+  expectedOutput: 'Stack after pushing 5: 5\nStack after popping: (empty)\nStack contents: 3, 2, 1',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 87,
+  title: 'Linked List Employee Management',
+  text: 'Create a COBOL program to manage a linked list of employee records. Each record contains employee ID, name, and salary. Implement functions to add a new employee, delete an employee by ID, and display all employees with salaries above a given threshold.',
+  expectedOutput: 'Employees with salaries above $50000:\nID: 001 Name: John Salary: $60000\nID: 002 Name: Jane Salary: $55000\nEmployee with ID 003 deleted.',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 88,
+  title: 'Matrix Multiplication and Transpose',
+  text: 'Design a COBOL program that reads a matrix (2D array) of integers and performs matrix multiplication. Print the resulting matrix. Provide a method to transpose the matrix and display the transposed result.',
+  expectedOutput: 'Resulting Matrix:\n1 4\n2 5\nTransposed Matrix:\n1 2\n4 5',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 89,
+  title: 'Queue Data Structure',
+  text: 'Write a COBOL program that simulates a basic queue data structure. Implement enqueue, dequeue, and display operations. Ensure that the program handles cases where the queue is empty or full.',
+  expectedOutput: 'Queue after enqueue operations: 1, 2, 3\nQueue after dequeue operation: 2, 3\nQueue is full',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 90,
+  title: 'Product Sorting by Price',
+  text: 'Develop a COBOL program that reads a list of product objects, where each product has an ID, name, and price. Implement sorting algorithms to sort products by price in ascending and descending order and display the sorted list.',
+  expectedOutput: 'Products sorted by price (ascending):\nID: 001 Name: Product A Price: $10\nID: 002 Name: Product B Price: $15\nProducts sorted by price (descending):\nID: 002 Name: Product B Price: $15\nID: 001 Name: Product A Price: $10',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 91,
+  title: 'Binary Tree Management',
+  text: 'Create a COBOL program that manages a binary tree of integer values. Implement functions to insert nodes, delete nodes, and traverse the tree in-order. Provide functionality to search for a specific value in the tree.',
+  expectedOutput: 'In-order traversal: 10, 20, 30, 40, 50\nSearch for value 30: Found\nDelete node with value 20\nIn-order traversal after deletion: 10, 30, 40, 50',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 92,
+  title: 'Dynamic Array of Employee Records',
+  text: 'Write a COBOL program that handles a dynamic array of employee records. Each record includes employee ID, name, and department. Implement functionality to add, remove, and update employee records and display all records for a specific department.',
+  expectedOutput: 'Employees in Department Sales:\nID: 001 Name: Alice\nID: 002 Name: Bob\nEmployee with ID 003 removed.\nEmployee with ID 004 updated to Marketing.',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 93,
+  title: 'Hash Table Simulation',
+  text: 'Design a COBOL program that simulates a basic hash table. Implement functions to insert, search, and delete key-value pairs. Handle collisions using chaining or open addressing and display the hash table contents.',
+  expectedOutput: 'Hash table contents:\nKey: 10 Value: Value10\nKey: 20 Value: Value20\nKey: 30 Value: Value30\nSearch for key 20: Found Value20\nDelete key 10\nHash table contents after deletion:\nKey: 20 Value: Value20\nKey: 30 Value: Value30',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 94,
+  title: 'Priority Queue Implementation',
+  text: 'Develop a COBOL program that implements a simple priority queue. Each item in the queue has a priority level. Implement enqueue and dequeue operations where items with higher priority are processed before those with lower priority.',
+  expectedOutput: 'Queue after enqueue operations (by priority):\nPriority 1: Item A\nPriority 2: Item B\nDequeue operation: Item A\nQueue contents after dequeue: Priority 2: Item B',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+{
+  id: 95,
+  title: 'Employee Timesheet and Pay Calculation',
+  text: 'Create a COBOL program that reads a series of employee time sheets. Each time sheet contains employee ID, hours worked, and overtime hours. Calculate and display each employee’s total pay, including overtime.',
+  expectedOutput: 'Employee ID: 001 Total Pay: $550\nEmployee ID: 002 Total Pay: $700\nEmployee ID: 003 Total Pay: $400',
+  isCorrect: false,
+  difficulty: 'Medium'
+},
+
+
+{
+  id: 96,
+  title: 'Customer Transaction Processing',
+  text: 'Write a COBOL program that processes customer transactions by reading data from two sequential files. The first file contains customer records with their name, ID, and account balance. The second file contains transaction records with customer ID, transaction type (D for deposit, W for withdrawal), and transaction amount. Your program should: \n1. Match customer IDs from both files.\n2. For each transaction, if the type is "D" (deposit), add the amount to the account balance; if the type is "W" (withdrawal), subtract the amount. Ensure that withdrawals do not result in a negative balance. If a withdrawal would lead to a negative balance, skip the transaction and log the error.\n3. After processing all transactions, update the customer records with the new balances and write the updated records to a new sequential file.\n4. Additionally, generate an error log for any failed transactions (e.g., due to insufficient funds).\n\nInput Example:\nCustomer File:\n1. John Doe, ID: 12345, Balance: $500.00\n2. Jane Smith, ID: 23456, Balance: $1000.00\n3. Bob Johnson, ID: 34567, Balance: $250.00\n\nTransaction File:\n1. ID: 12345, Type: D, Amount: $200.00\n2. ID: 23456, Type: W, Amount: $300.00\n3. ID: 34567, Type: D, Amount: $100.00\n4. ID: 12345, Type: W, Amount: $50.00',
+  expectedOutput: `Customer: John Doe   ID: 12345  Updated Balance: 650.00\nCustomer: Jane Smith ID: 23456  Updated Balance: 700.00\nCustomer: Bob Johnson ID: 34567  Updated Balance: 350.00\nThe updated balances have been written to the new file.\nError Log: No errors.`,
+  isCorrect: false,
+  difficulty: 'Hard'
+},
+{
+  id: 97,
+  title: 'Employee Payroll Calculation with Error Logging',
+  text: 'Write a COBOL program that processes employee payroll by reading data from a sequential file. Each record in the file contains the employee’s name, ID, hourly wage, and total hours worked. Your program should:\n1. Calculate the gross pay for each employee by multiplying the hourly wage by the total hours worked.\n2. If the employee worked more than 40 hours, calculate overtime pay for the additional hours at 1.5 times the hourly wage.\n3. If any employee has negative hours worked or a negative wage, log the error and skip that employee.\n4. After processing all employees, display each employee’s name, ID, gross pay, and write an error log for any invalid employee records (e.g., negative hours or wages).\n5. Finally, calculate and display the total gross pay for all valid employees.\n\nInput Example:\nEmployee File:\n1. John Doe, ID: 12345, Wage: $15.00, Hours: 45\n2. Jane Smith, ID: 23456, Wage: $20.00, Hours: 38\n3. Bob Johnson, ID: 34567, Wage: $18.00, Hours: -5 (invalid record)\n4. Alice Williams, ID: 45678, Wage: $22.00, Hours: 50',
+  expectedOutput: `Employee: John Doe   ID: 12345  Gross Pay: 712.50\nEmployee: Jane Smith ID: 23456  Gross Pay: 760.00\nEmployee: Alice Williams ID: 45678  Gross Pay: 1210.00\nTotal gross pay for all employees: 2682.50\nError Log: Bob Johnson - Invalid hours: -5`,
+  isCorrect: false,
+  difficulty: 'Hard'
+},
+{
+  id: 98,
+  title: 'Merge Customer Purchases and Payments',
+  text: 'Write a COBOL program that merges customer purchase and payment records from two sorted sequential files. The first file contains customer purchase records (customer ID and total purchases), and the second file contains customer payment records (customer ID and total payments). Your program should:\n1. Merge the two files based on matching customer IDs.\n2. For each customer, subtract the payment amount from the purchase total to calculate the remaining balance.\n3. If any customer ID exists in one file but not the other, log the mismatch error.\n4. Write the merged records to a new sequential file, displaying each customer’s ID, name, and remaining balance.\n5. Additionally, generate an error log for mismatched IDs.\n\nInput Example:\nPurchase File:\n1. John Doe, ID: 12345, Purchases: $600.00\n2. Jane Smith, ID: 23456, Purchases: $1200.00\n3. Bob Johnson, ID: 34567, Purchases: $300.00\n\nPayment File:\n1. Jane Smith, ID: 23456, Payments: $500.00\n2. Bob Johnson, ID: 34567, Payments: $150.00\n3. Alice Williams, ID: 45678, Payments: $400.00 (mismatch)',
+  expectedOutput: `Customer: John Doe   ID: 12345  Balance: 600.00\nCustomer: Jane Smith ID: 23456  Balance: 700.00\nCustomer: Bob Johnson ID: 34567  Balance: 150.00\nMerged data has been written to a new file.\nError Log: Alice Williams - No matching purchase record.`,
+  isCorrect: false,
+  difficulty: 'Hard'
+},
+{
+  id: 99,
+  title: 'Inventory Reorder System',
+  text: 'Write a COBOL program that processes inventory records by reading data from a sequential inventory file. Each record contains the product name, product ID, current stock level, reorder threshold, and supplier ID. Your program should:\n1. Identify products where the current stock is below the reorder threshold.\n2. For each product that needs reordering, calculate the quantity to reorder (reorder threshold minus current stock).\n3. Write a reorder file containing the product name, ID, and reorder quantity.\n4. Additionally, group the reorder report by supplier ID and display a summary report of all products that need reordering for each supplier.\n\nInput Example:\nInventory File:\n1. Product A, ID: 10001, Stock: 50, Threshold: 100, Supplier: 5001\n2. Product B, ID: 10002, Stock: 120, Threshold: 100, Supplier: 5002\n3. Product C, ID: 10003, Stock: 20, Threshold: 50, Supplier: 5001\n4. Product D, ID: 10004, Stock: 80, Threshold: 200, Supplier: 5003',
+  expectedOutput: `Product: Product A   ID: 10001  Quantity to Reorder: 50\nProduct: Product C   ID: 10003  Quantity to Reorder: 30\nProduct: Product D   ID: 10004  Quantity to Reorder: 120\nReorder Report:\nSupplier 5001: Product A - 50 units, Product C - 30 units\nSupplier 5003: Product D - 120 units`,
+  isCorrect: false,
+  difficulty: 'Hard'
+},
+{
+  id: 100,
+  title: 'Financial Transaction Processing',
+  text: 'Write a COBOL program that processes financial transactions for multiple accounts. The program reads from a sequential file containing records with account numbers, transaction types (D for deposit, W for withdrawal, T for transfer), transaction amounts, and recipient account (for transfers). Your program should:\n1. For each deposit (D), add the transaction amount to the account balance.\n2. For each withdrawal (W), subtract the transaction amount, ensuring that no withdrawal results in a negative balance. If a withdrawal would result in a negative balance, log the error and skip the transaction.\n3. For each transfer (T), move the transaction amount from the source account to the recipient account.\n4. Write valid transactions to a new sequential file, and log any failed transactions (e.g., insufficient funds or invalid account numbers).\n5. Finally, display the updated account balances and log errors.\n\nInput Example:\nTransaction File:\n1. Account 1001, D, $500.00\n2. Account 1002, W, $300.00\n3. Account 1003, T, $200.00, Recipient: 1004\n4. Account 1002, W, $900.00 (insufficient funds)',
+  expectedOutput: `Transaction: Account 1001 - Deposit: $500.00 - Success\nTransaction: Account 1002 - Withdrawal: $300.00 - Success\nTransaction: Account 1003 - Transfer: $200.00 to Account 1004 - Success\nTransaction: Account 1002 - Withdrawal: $900.00 - Failed (Insufficient funds)\nValid Transactions File Written.\nError Log File Written: Account 1002 - Insufficient funds.`,
+  isCorrect: false,
+  difficulty: 'Hard'
+}
+
     ];
 
     let currentChallengeIndex = 0;
@@ -229,10 +1091,13 @@
         const listItem = listItems[i];
         const challenge = challenges[i];
         listItem.classList.remove('correct', 'incorrect');
+        const checkbox = listItem.querySelector('input[type="checkbox"]');
         if (isQuestionCorrect(challenge.id)) {
           listItem.classList.add('correct');
+          checkbox.checked = true;
         } else {
           listItem.classList.add('incorrect');
+          checkbox.checked = false;
         }
       }
     }
@@ -251,6 +1116,9 @@
         const listItem = document.createElement('li');
         listItem.className = 'problem-item';
         listItem.innerHTML = `
+          <div class="challenge-checkbox">
+            <input type="checkbox" id="checkbox-${challenge.id}" ${isQuestionCorrect(challenge.id) ? 'checked' : ''} disabled>
+          </div>
           <span class="problem-title">Challenge ${challenge.id}: ${challenge.title}</span>
           <div>
             <span class="difficulty ${challenge.difficulty.toLowerCase()}">${challenge.difficulty}</span>
@@ -275,6 +1143,28 @@
       alert(`Expected Output: ${challenge.expectedOutput}`);
     }
 
+    function calculateRank(completedChallenges) {
+      if (completedChallenges >= 90) return "Expert Developer";
+      if (completedChallenges >= 75) return "Senior Developer";
+      if (completedChallenges >= 50) return "Developer";
+      if (completedChallenges >= 25) return "Junior Developer";
+      if (completedChallenges >= 0) return "Apprentice Coder";
+      return "Apprentice Coder";
+    }
+
+    function getRankEmblem(rank) {
+      const emblems = {
+        
+        "Expert Developer": "images/emblem5.png",
+        "Senior Developer": "images/emblem4.png",
+        "Developer": "images/emblem3.png",
+        "Junior Developer": "images/emblem2.png",
+        "Apprentice Coder": "images/emblem1.png",
+
+      };
+      return emblems[rank] || "images/emblem-default.png";
+    }
+
     function calculateStats(challenges) {
       const totalChallenges = challenges.length;
       const correctChallenges = challenges.filter(challenge => isQuestionCorrect(challenge.id)).length;
@@ -286,13 +1176,17 @@
       const correctMedium = challenges.filter(challenge => challenge.difficulty === 'Medium' && isQuestionCorrect(challenge.id)).length;
       const correctHard = challenges.filter(challenge => challenge.difficulty === 'Hard' && isQuestionCorrect(challenge.id)).length;
 
+      const rank = calculateRank(correctChallenges);
+
       return {
         total: totalChallenges,
         correct: correctChallenges,
         percentage: percentageCorrect,
         Easy: { total: totalEasy, correct: correctEasy },
         Medium: { total: totalMedium, correct: correctMedium },
-        Hard: { total: totalHard, correct: correctHard }
+        Hard: { total: totalHard, correct: correctHard },
+        rank: rank,
+        emblem: getRankEmblem(rank)
       };
     }
 
@@ -302,6 +1196,9 @@
       document.getElementById('total-easy').innerText = `Easy: ${stats.Easy.correct} out of ${stats.Easy.total}`;
       document.getElementById('total-medium').innerText = `Medium: ${stats.Medium.correct} out of ${stats.Medium.total}`;
       document.getElementById('total-hard').innerText = `Hard: ${stats.Hard.correct} out of ${stats.Hard.total}`;
+      userRankElement.innerText = stats.rank;
+      rankEmblemElement.src = stats.emblem;
+      rankEmblemElement.alt = `${stats.rank} Emblem`;
     }
 
     function logout() {
